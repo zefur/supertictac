@@ -1,25 +1,129 @@
  <body>
     <div class="welcome-message">
-      <h1>Tic Tac Toe</h1>
+      <h1 class="">Tic Tac Toe</h1>
       <p>
         Welcome to my simple Tic Tac Toe game pleas select the mode and colour
         scheme
       </p>
 
-      <button id="onePlayer">Two player mode</button
-      ><button id="color">Black</button>
+      <button id="onePlayer">Two player mode</button><button id="color">Black</button>
     </div>
     <main>
-      <div class="board" id="board">
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
+      <div class="flex justify-center items-center width-screen h-screen" id="board">
+      <div class="inline-grid grid-cols-3">
+      <div class="grid grid-cols-3" data-game-id= 1>
+        <%= render(CellComponent.new) %>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-blue-300" data-reflex="click->Game#click"></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-yellow-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-purple-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-500" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-pink-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-gray-300"  ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+       
+      </div>
+       
+        
+ <div class="grid grid-cols-3">
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-300" >hello</div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-blue-300"></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-yellow-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-purple-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-500" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+       
+      </div>
+       <div class="grid grid-cols-3">
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-300" >hello</div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-blue-300"></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-yellow-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-purple-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-500" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+       
+      </div>
+        <div class="grid grid-cols-3">
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-300" >hello</div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-blue-300"></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-yellow-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-purple-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-500" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+       
+      </div>
+        <div class="grid grid-cols-3">
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-300" >hello</div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-blue-300"></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-yellow-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-purple-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-500" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+       
+      </div>
+        <div class="grid grid-cols-3">
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-300" >hello</div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-blue-300"></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-yellow-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-purple-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-500" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+       
+      </div>
+        <div class="grid grid-cols-3">
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-300" >hello</div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-blue-300"></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-yellow-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-purple-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-500" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+       
+      </div>
+        <div class="grid grid-cols-3">
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-300" >hello</div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-blue-300"></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-yellow-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-purple-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-500" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+       
+      </div>
+        <div class="grid grid-cols-3">
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-300" >hello</div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-blue-300"></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-yellow-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-purple-300" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg bg-red-500" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" ></div>
+       
+      </div>
+       
+       
+       </div>
       </div>
       <div class="winning-message" id="gameover">
         <div data-winning-message-text></div>
@@ -27,4 +131,3 @@
       </div>
     </main>
   </body>
-  
