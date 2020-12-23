@@ -32,7 +32,8 @@ class GameReflex < ApplicationReflex
   #
   # Learn more at: https://docs.stimulusreflex.com/reflexes#reflex-classes
   def click
-    puts "My name is james"
+    @mark == "X" ?  @mark = "O" :  @mark = "X"
+    @data = element.dataset["cell-id"]
   end
 
 end
