@@ -39,11 +39,12 @@ class GameReflex < ApplicationReflex
     
     puts '*****************************'
     @cell = Cell.find(element.dataset['cell-id'])
-
+    @cell.choice
     morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell, message: 'Hi' }))
-    morph '#test'
+    morph '#test', @test
     @test = session[:cell_id]
     puts '*****************************'
+    
     puts @test
     puts '*****************************'
   end
