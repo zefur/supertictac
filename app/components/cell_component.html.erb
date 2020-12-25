@@ -1,1 +1,8 @@
-<div class="border-solid border-2 border-black w-20 h-20 rounded-lg"></div>
+<div id="<%= dom_id(@cell) %>" class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="<%=@cell.id%>" >  <%=@cell.id%> <%= @message %>
+<%if @cell.cross? %>
+<p class="text-center">X</p>
+<% elsif @cell.nought? %>
+<p class="text-center">O</p>
+<% end %>
+
+</div>

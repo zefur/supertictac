@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class GameReflex < ApplicationReflex
+  delegate :current_user, to: :connection
   # Add Reflex methods in this file.
   #
   # All Reflex instances include CableReady::Broadcaster and expose the following properties:
@@ -32,8 +33,27 @@ class GameReflex < ApplicationReflex
   #
   # Learn more at: https://docs.stimulusreflex.com/reflexes#reflex-classes
   def click
-    @mark == "X" ?  @mark = "O" :  @mark = "X"
-    @data = element.dataset["cell-id"]
+    session[:cell_id] = element.dataset['cell-id']
+    puts '*****************************'
+    puts session[:cell_id]
+    
+    puts '*****************************'
+    @cell = Cell.find(element.dataset['cell-id'])
+
+    morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell, message: 'Hi' }))
+    morph '#test'
+    @test = session[:cell_id]
+    puts '*****************************'
+    puts @test
+    puts '*****************************'
   end
 
+  def hover
+    # @data = element["cell-id"]
+  end
+
+  def leave
+    # element["class"] = element["class"].split(" ").pop("circle").join(" ")
+    # @data = "hello"
+  end
 end
