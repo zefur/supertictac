@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class GameReflex < ApplicationReflex
-  delegate :current_user, to: :connection
+  
   # Add Reflex methods in this file.
   #
   # All Reflex instances include CableReady::Broadcaster and expose the following properties:
