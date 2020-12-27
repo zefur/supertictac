@@ -5,7 +5,11 @@ class PagesController < ApplicationController
   def home
     @cells = Cell.all
     @games = Game.all
-    @test ||= '0'
+    
+  end
+
+  def start_game
+
   end
 
   private
@@ -14,7 +18,13 @@ class PagesController < ApplicationController
     @board = Board.first
   end
 
-  def check_game; end
+  def set_game_rooms
+    @game_rooms = GameRoom.all
+  end
 
-  def check_board; end
+  def check_game; 
+  end
+
+  def check_board; 
+  end
 end

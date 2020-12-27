@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class GameReflex < ApplicationReflex
-  
+  delegate :current_or_guest_user , to: :connection
   # Add Reflex methods in this file.
   #
   # All Reflex instances include CableReady::Broadcaster and expose the following properties:
@@ -34,27 +34,50 @@ class GameReflex < ApplicationReflex
   # Learn more at: https://docs.stimulusreflex.com/reflexes#reflex-classes
   def click
     session[:cell_id] = element.dataset['cell-id']
-    puts '*****************************'
-    puts session[:cell_id]
-    
-    puts '*****************************'
     @cell = Cell.find(element.dataset['cell-id'])
     @cell.choice
-    morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell, message: 'Hi' }))
-    morph '#test', @test
+    # morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell, message: 'Hi' }))
+    @game = Game.find(@cell.place)
+    @old_game = Game.find(@cell.game_id)
+      # cable_ready.remove_css_class(
+      #     selector: "[data-game_#{@old_game.id}]",
+      #     name: "bg-blue-300"
+      # )
+      
+      cable_ready.add_css_class(
+          selector: "#game_#{@game.id}",
+          name: "bg-blue-300"
+      )
+      puts "999999999999999999999"
+      puts @cell
+      puts "999999999999999999999"
     @test = session[:cell_id]
-    puts '*****************************'
+   
+  end
+  
+
+  def check
+    session[:cell_id] = element.dataset['cell-id']
+    @cell = Cell.find(element.dataset['cell-id'])
+    cable_ready.add_css_class(
+      selector: "#cell_#{@cell.id}", 
+      name: "x"
+    )
+ 
+  end
+
+  def uncheck
+    session[:cell_id] = element.dataset['cell-id']
+    @cell = Cell.find(element.dataset['cell-id'])
+      cable_ready
+        .remove_css_class(
+        selector: "#cell_#{@cell.id}", 
+        name: "x"
+      )
+      morph :nothing
+  end
     
-    puts @test
-    puts '*****************************'
-  end
-
-  def hover
-    # @data = element["cell-id"]
-  end
-
-  def leave
-    # element["class"] = element["class"].split(" ").pop("circle").join(" ")
-    # @data = "hello"
-  end
 end
+
+
+

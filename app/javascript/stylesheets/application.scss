@@ -14,27 +14,21 @@ body {
   margin: 0;
 }
 :root {
-  --cell-size: 100px;
+  --cell-size: 80px;
   --mark-size: calc(var(--cell-size) * 0.9);
+  --game-size: 240px;
+  --gamemark-size: calc(var(--game-size) * 0.9);
 }
 .board {
-  width: 100vw;
-  height: 100vh;
-  display: grid;
-  justify-content: center;
-  align-content: center;
-  justify-items: center;
-  align-items: center;
-  grid-template-columns: repeat(3, auto);
+
+
 }
 
 .cell {
   width: var(--cell-size);
   height: var(--cell-size);
   border: 1px solid black;
-  display: flex;
   justify-content: center;
-  align-items: center;
   position: relative;
   cursor: pointer;
 }
@@ -134,3 +128,27 @@ body {
   align-items: center;
   text-align: center;
 }
+
+.game.gamemark::before,
+.game.gamemark::after,
+.board2.gamemark .game:not(.x):not(.circle):hover::before,
+.board2.gamemark .game:not(.x):not(.circle):hover::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.game.gamemark::before,
+.board2.gamemark .game:not(.x):not(.circle)::before {
+  width: var(--gamemark-size);
+  height: var(--gamemark-size);
+}
+.game.gamemark::before {
+  background-color: black;
+}
+// .game.gamemark::after,
+// .board2.gamemark .game:not(.x):not(.circle):hover::after {
+//   width: calc(var(--gamemark-size) * 0.7);
+//   height: calc(var(--gamemark-size) * 0.7);
+//   background-color: white;
+// }

@@ -1,5 +1,8 @@
 import ApplicationController from './application_controller'
+import debounced from 'debounced'
+debounced.initialize()
 
+document.addEventListener('debounced:mouseleave', event => {this.stimulate('Game#uncheck')})
 /* This is the custom StimulusReflex controller for the Game Reflex.
  * Learn more at: https://docs.stimulusreflex.com
  */

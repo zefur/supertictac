@@ -7,126 +7,26 @@
       </p> %>
 
       <%# <%# <button id="onePlayer">Two player mode</button><button id="color">Black</button> %>
-      <div id="test"> The cell <div>  <%= @test %>  </div>  was clicked</div>
+       <% if @old_game %><%= @old_game.id %> 
+       <% end %>
+       
+       <% if @game %>
+         <%= @game.id %>
+       <% end %>
+        <%= current_or_guest_user.user_name %>
+       
     </div> 
     <main>
-      <div class="flex justify-center items-center width-screen h-screen" id="board">
+      <div class="flex justify-center items-center width-screen h-screen " id="board">
       
       <div class="inline-grid grid-cols-3">
       <% @games.each do |game| %>
-      <div class="grid grid-cols-3  bg-blue-300" data-game-id="1">
+      <div id="<%= dom_id(game) %>" class="grid grid-cols-3 game  board" data-game-id=<%=game.id%>  datase>
       <% game.cells.each do |cell| %>
         <%= render(CellComponent.new({cell:cell})) %>
         <% end %>
       </div>
-       
-       
-       
-        
- <%# <div class="grid grid-cols-3  bg-yellow-300" data-game-id="2">
-        <div id="hello" class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->game#click" data-cell-id="1" data-reflex-dataset="combined">1
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="2" data-reflex-dataset="combined">2
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="3" data-reflex-dataset="combined">d</div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="4" data-reflex-dataset="combined">4</div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="5" data-reflex-dataset="combined">5</div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="6" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="7" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="8" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="9" data-reflex-dataset="combined"></div>
-      </div>
-       <div class="grid grid-cols-3 bg-purple-300" data-game-id="3">
-       <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->game#click" data-cell-id="1" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="2" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="3" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="4" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="5" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="6" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="7" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="8" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="9" data-reflex-dataset="combined"></div>
-      </div>
-        <div class="grid grid-cols-3 bg-red-300" data-game-id="4">
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->game#click" data-cell-id="1" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="2" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="3" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="4" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="5" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="6" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="7" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="8" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="9" data-reflex-dataset="combined"></div>
-      </div>
-        <div class="grid grid-cols-3 bg-gray-500" data-game-id="5">
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->game#click" data-cell-id="1" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="2" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="3" data-reflex-dataset="combine"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="4" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="5" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="6" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="7" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="8" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="9" data-reflex-dataset="combined"></div>
-      </div>
-        <div class="grid grid-cols-3 bg-green-300" data-game-id="6">
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->game#click" data-cell-id="1" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="2" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="3" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="4" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="5" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="6" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="7" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="8" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="9" data-reflex-dataset="combined"></div>
-      </div>
-        <div class="grid grid-cols-3 bg-indigo-500" data-game-id="7">
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->game#click" data-cell-id="1" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="2" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="3" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="4" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="5" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="6" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="7" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="8" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="9" data-reflex-dataset="combined"></div>
-      </div>
-        <div class="grid grid-cols-3" data-game-id="8">
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->game#click" data-cell-id="1" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="2" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="3" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="4" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="5" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="6" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="7" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="8" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="9" data-reflex-dataset="combined"></div>
-      </div>
-        <div class="grid grid-cols-3 bg-red-900" data-game-id="9">
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->game#click" data-cell-id="1" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="2" data-reflex-dataset="combined">
-        </div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="3" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="4" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="5" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="6" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="7" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="8" data-reflex-dataset="combined"></div>
-        <div class="border-solid border-2 border-black w-20 h-20 rounded-lg" data-reflex="click->Game#click" data-cell-id="9" data-reflex-dataset="combined"></div> %>
-      
+
        
        <% end %>
        </div>

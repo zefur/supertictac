@@ -5,12 +5,12 @@ class Cell < ApplicationRecord
   belongs_to :game
 
   def choice
-    if self.nothing?
-      self.cross!
-    elsif self.cross?
-      self.nought!
+    if nothing?
+      cross!
+    elsif cross?
+      nought!
     else
-      self.nothing!
+      nothing!
     end
   end
 end
