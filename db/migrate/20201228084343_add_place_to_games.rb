@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class AddColumnPlaceToCell < ActiveRecord::Migration[6.0]
+class AddPlaceToGames < ActiveRecord::Migration[6.0]
   def change
-    add_column :cells, :place, :integer
+    add_column :games, :place, :integer
     # Ex:- add_column("admin_users", "username", :string, :limit =>25, :after => "email")
   end
 end

@@ -8,11 +8,11 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 1.times do
-  GameRoom.create 
+  GameRoom.create
   GameRoom.all.each do |game_room|
-    Board.create(game_room_id: game_room.id )
+    Board.create(game_room_id: game_room.id)
   end
-  
+
   Board.all.each do |board|
     9.times do
       Game.create!(board_id: board.id)
@@ -29,5 +29,4 @@ Game.all.each do |game|
   Cell.create(game_id: game.id, place: 7)
   Cell.create(game_id: game.id, place: 8)
   Cell.create(game_id: game.id, place: 9)
-  end
-
+end

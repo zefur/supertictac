@@ -5,11 +5,12 @@ class Game < ApplicationRecord
   has_many :cells, dependent: :destroy
 
   def check_win
-    WINNING_COMBOS.any? do |x|
-      x.all? do |y|
+    WINNING_COMBOS.any? do |combos|
+      combos.all? do |y|
         cells[y].cross?
       end
     end
+    
   end
 
   WINNING_COMBOS = [

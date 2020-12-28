@@ -1,0 +1,23 @@
+ <main>
+      <div id="room-id" class="flex justify-center items-center width-screen h-screen "  data-gameroom-id= "<%=@game_room.id%>">
+      
+      <div class="inline-grid grid-cols-3">
+      <% @games.each do |game| %>
+      <div id="game_<%= game.place %>" class="grid grid-cols-3 game  board" data-game-id="<%=game.id%>"  dataset= "combined">
+      <% game.cells.each do |cell| %>
+        <%= render(CellComponent.new({cell:cell})) %>
+        <% end %>
+      </div>
+
+       
+       <% end %>
+       </div>
+       
+       </div> 
+       
+      </div>
+      <div class="winning-message" id="gameover">
+        <div data-winning-message-text></div>
+        <button id="restart">Restart</button>
+      </div>
+    </main>

@@ -1,27 +1,20 @@
 class Match < ApplicationRecord
 
-    def place_mark(player)
-        cable_ready["game_room_#{game_room_id}"].add_css_class(
-            selector: "#cell_#{@cell.id}", 
-            name: "#{player.mark == "x" ? "x" : "circle"}"
-          )
-    end
-
-    def next_move
-        @game = Game.find(element.dataset["cell-id"]
-        @old_game = Game.find(element.dataset["game_id"])
-        cable_ready["game_room_#{game_room.id}"].remove_css_class(
-            selector: "#game_#{@old_game.game_id}",
-            name: "bg-blue-300"
-        )
-        cable_ready["game_room_#{game_room.id}"].add_css_class(
-            selector: "#game_#{@game.game_id}",
-            name: "bg-blue-300"
-        )
+    # this is from the cookiehq tictac toe tutorial, I couldnt get it to work it makes sense if I land 
+    def self.create(current_or_guest_user)
+        if REDIS.get("matches").blank?
+          REDIS.set("matches", current_or_guest_user)
         
-    end
+        else
+        # Get the uuid of the player waiting
 
-    def swap_turns
-        
-    end
+          opponent = REDIS.get("matches")
+    
+          Board.start(current_or_guest_user, opponent)
+          # Clear the waiting key as no one new is waiting
+          REDIS.set("matches", nil)
+        end
+      end
+
+    
 end
