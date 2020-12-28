@@ -1,6 +1,6 @@
 # README
 
-##SuperTicTac
+## SuperTicTac
 
 A lot more to do, I wasnt able to complete in the 7 days
 
