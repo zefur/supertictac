@@ -36,20 +36,43 @@ class GameReflex < ApplicationReflex
 # this is very mess could do with some tidying up but more/less works as planned
     @cell = Cell.find(element.dataset['cell-id'])
     @cell.choice
-    morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell, message: '' }))
+    if @cell.cross?
+      morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
+      cable_ready.add_css_class(
+      selector: "#cell_#{@cell.id}",
+      name: 'x'
+    )
+    elsif @cell.nought?
+      morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
+      cable_ready.remove_css_class(
+        selector: "#cell_#{@cell.id}",
+        name: 'x'
+      )
+      cable_ready.add_css_class(
+        selector: "#cell_#{@cell.id}",
+        name: 'circle'
+      )
+    elsif @cell.nothing?
+      morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
+      cable_ready.remove_css_class(
+        selector: "#cell_#{@cell.id}",
+        name: 'circle'
+      )
+    end
+    
     @game = Game.find(@cell.place)
     @old_game = Game.find(@cell.game_id)
+
     game_room = GameRoom.find(params[:id])
     cable_ready.remove_css_class(
       selector: "#game_#{@old_game.place}",
       name: 'bg-blue-300'
     )
-    cable_ready[GameRoomChannel].add_css_class(
-      selector: "#cell_#{@cell.id}",
-      name: 'x'
+    cable_ready.add_css_class(
+      selector: ".game",
+      name: "inactive"
     )
-
-    cable_ready[GameRoomChannel].add_css_class(
+    cable_ready.add_css_class(
       selector: "#game_#{@game.place}",
       name: 'bg-blue-300'
     ).broadcast_to(game_room)

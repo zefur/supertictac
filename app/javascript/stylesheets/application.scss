@@ -146,9 +146,13 @@ body {
 .game.gamemark::before {
   background-color: black;
 }
-// .game.gamemark::after,
-// .board2.gamemark .game:not(.x):not(.circle):hover::after {
-//   width: calc(var(--gamemark-size) * 0.7);
-//   height: calc(var(--gamemark-size) * 0.7);
-//   background-color: white;
-// }
+.game.gamemark::after,
+.board2.gamemark .game:not(.x):not(.circle):hover::after {
+  width: calc(var(--gamemark-size) * 0.7);
+  height: calc(var(--gamemark-size) * 0.7);
+  background-color: white;
+}
+
+.inactive {
+  pointer-events: none;
+}
