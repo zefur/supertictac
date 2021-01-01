@@ -1,7 +1,7 @@
  <main>
       <div id="room-id" class="flex justify-center items-center width-screen h-screen <%= @message%> "  data-gameroom-id= "<%=@game_room.id%>">
       
-      <div class="inline-grid grid-cols-3">
+      <div id="test" class="inline-grid grid-cols-3" data-id= "test">
       <% @games.each do |game| %>
       <div id="game_<%= game.place %>" class="grid grid-cols-3 game items-center justify-center board" data-game-id="<%=game.id%>"  dataset= "combined">
       <% game.cells.each do |cell| %>

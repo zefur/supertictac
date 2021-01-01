@@ -62,16 +62,22 @@ class GameReflex < ApplicationReflex
     
     @game = Game.find(@cell.place)
     @old_game = Game.find(@cell.game_id)
-
+ 
     game_room = GameRoom.find(params[:id])
     cable_ready.remove_css_class(
       selector: "#game_#{@old_game.place}",
       name: 'bg-blue-300'
-    )
-    cable_ready.add_css_class(
-      selector: ".game",
+    ).add_css_class(
+      selector: "#test",
       name: "inactive"
+    ).add_css_class(
+      selector: "#game_#{@game.place}",
+      name: "active"
+    ).remove_css_class(
+      selector: "#game_#{@old_game.place}",
+      name: "active"
     )
+   
     cable_ready.add_css_class(
       selector: "#game_#{@game.place}",
       name: 'bg-blue-300'

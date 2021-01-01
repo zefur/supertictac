@@ -156,3 +156,6 @@ body {
 .inactive {
   pointer-events: none;
 }
+.active {
+  pointer-events: all;
+}
