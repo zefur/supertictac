@@ -38,6 +38,10 @@ class GameReflex < ApplicationReflex
     @cell.choice
     if @cell.cross?
       morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
+      cable_ready.remove_css_class(
+        selector: "#cell_#{@cell.id}",
+        name: "m"
+      )
       cable_ready.add_css_class(
       selector: "#cell_#{@cell.id}",
       name: 'x'

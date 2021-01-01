@@ -1,4 +1,4 @@
-<div id="<%= dom_id(@cell) %>"  class="flex border-solid border-2 border-black w-20 h-20 rounded-lg  cell" data-reflex="click->Game#click " data-cell-id="<%=@cell.id%>" data-reflex-dataset="combined" >  <%=@cell.place%> <%= @message %>
+<div id="<%= dom_id(@cell) %>"  class="flex border-solid border-2 border-black w-20 h-20 rounded-lg items-center cell" data-reflex="click->Game#click " data-cell-id="<%=@cell.id%>" data-reflex-dataset="combined" >  <%=@cell.place%> <%= @message %>
 <%if @cell.cross? %>
 <p class="text-center">X</p>
 <% elsif @cell.nought? %>
