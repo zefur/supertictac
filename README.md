@@ -7,7 +7,7 @@ A lot more to do, I wasnt able to complete in the 7 days
 Things to do (almost everything)
 
 - make it two player only (more people can watch but only two can interact) **Hard**
-- ~~finish the move logic (activating and deactivating cells)  you should only be able to play in the highlighted cells
+- ~~finish the move logic (activating and deactivating cells)  you should only be able to play in the highlighted cells~~
 - implement the game logic (the basics are already there in Game.rb and Board.rb)
 - Add login and stat tracking capabilities
 - Add powerups
