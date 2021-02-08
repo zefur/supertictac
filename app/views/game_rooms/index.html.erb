@@ -1,7 +1,8 @@
 
 <%# messy cos my focus was elsewhere %>
+<%= current_user.user_name %>
 <% @game_rooms.each do |game_room| %>
-<%= link_to "Join Room",  join_match_game_room_path(game_room) %>
+<%= link_to "Join Room",  join_match_game_room_path(game_room, {user_id:current_user}) %>
 
 
 

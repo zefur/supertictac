@@ -10,7 +10,6 @@ class Game < ApplicationRecord
         cells[y].cross?
       end
     end
-    
   end
 
   WINNING_COMBOS = [
