@@ -9,10 +9,14 @@ class GameRoomsController < ApplicationController
 
   def join_match 
     #Trying to make a joins table so I can link users to a game (and then use that to reject non linked users from the channel)
-   @game_room_user = GameRoomUser.new
+   
     @game_room = GameRoom.find(params[:id])
-    GameRoomUser.create!({game_room_id: @game_room.id, users_id: [@user.id]})
+    if @game_room.players.count < 2
+    @game_room.players << @user
+    @game_room.save
     redirect_to game_room_path(@game_room)
+  end
+    
   end
 
   def new
