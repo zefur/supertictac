@@ -2,6 +2,7 @@
 
 class GameReflex < ApplicationReflex
   delegate :current_or_guest_user, to: :connection
+  delegate :session_id, to: :connection
   # Add Reflex methods in this file.
   #
   # All Reflex instances include CableReady::Broadcaster and expose the following properties:
@@ -33,9 +34,12 @@ class GameReflex < ApplicationReflex
   #
   # Learn more at: https://docs.stimulusreflex.com/reflexes#reflex-classes
   def click
-# this is very mess could do with some tidying up but more/less works as planned
+# this is very messy could do with some tidying up but more/less works as planned
     @cell = Cell.find(element.dataset['cell-id'])
+    
+
     @cell.choice
+    # The code here (43-69) has been refactored but is and should be deleted but when its deleted the highlighting stops working. 
     if @cell.cross?
       morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
       cable_ready.remove_css_class(
@@ -63,6 +67,7 @@ class GameReflex < ApplicationReflex
         name: 'circle'
       )
     end
+    # 
     
     @game = Game.find(@cell.place)
     @old_game = Game.find(@cell.game_id)
@@ -82,7 +87,7 @@ class GameReflex < ApplicationReflex
       name: "active"
     )
    
-    cable_ready.add_css_class(
+    cable_ready[GameRoomChannel].add_css_class(
       selector: "#game_#{@game.place}",
       name: 'bg-blue-300'
     ).broadcast_to(game_room)

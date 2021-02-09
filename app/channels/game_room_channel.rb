@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 class GameRoomChannel < ApplicationCable::Channel
-  player_limit = 2
+ 
 
   def subscribed
+    room = GameRoom.find(params[:id])
     puts "*********************"
-    puts connection.server.connections.count
+    puts connection.identifiers
     puts "*********************"
+    
     stream_for(GameRoom.find(params[:id]))
     stream_from("player_#{current_or_guest_user.user_name}")
     # below doesnt work

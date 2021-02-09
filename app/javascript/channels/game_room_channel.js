@@ -10,8 +10,9 @@ document.addEventListener("turbolinks:load", () => {
     {
       connected() {
         // Called when the subscription is ready for use on the server
-        alert("you have joined the channel");
-        console.log(this);
+
+        console.log(this.consumer);
+        console.log(this.subscription);
       },
 
       disconnected() {
