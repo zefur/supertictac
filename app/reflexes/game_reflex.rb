@@ -36,9 +36,13 @@ class GameReflex < ApplicationReflex
   def click
 # this is very messy could do with some tidying up but more/less works as planned
     @cell = Cell.find(element.dataset['cell-id'])
-    
-
-    @cell.choice
+    game_room = GameRoom.find(params[:id])
+    if current_or_guest_user == game_room.players[0]
+      @cell.cross!
+    elsif current_or_guest_user == game_room.players[1]
+      @cell.nought!
+    end
+    # @cell.choice
     # The code here (43-69) has been refactored but is and should be deleted but when its deleted the highlighting stops working. 
     if @cell.cross?
       morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
@@ -72,7 +76,7 @@ class GameReflex < ApplicationReflex
     @game = Game.find(@cell.place)
     @old_game = Game.find(@cell.game_id)
  
-    game_room = GameRoom.find(params[:id])
+    
     cable_ready.remove_css_class(
       selector: "#game_#{@old_game.place}",
       name: 'bg-blue-300'

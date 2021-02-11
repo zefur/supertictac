@@ -6,10 +6,11 @@ class GameRoomChannel < ApplicationCable::Channel
   def subscribed
     room = GameRoom.find(params[:id])
     puts "*********************"
-    puts connection.identifiers
+    puts params
     puts "*********************"
     
     stream_for(GameRoom.find(params[:id]))
+    
     stream_from("player_#{current_or_guest_user.user_name}")
     # below doesnt work
     #Match.create(current_or_guest_user)
@@ -20,9 +21,7 @@ class GameRoomChannel < ApplicationCable::Channel
     
   end
 
-  def players; end
 
-  def take_turn; end
 
   private
 

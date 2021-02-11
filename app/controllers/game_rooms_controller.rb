@@ -12,10 +12,13 @@ class GameRoomsController < ApplicationController
    
     @game_room = GameRoom.find(params[:id])
     if @game_room.players.count < 2
-    @game_room.players << @user
-    @game_room.save
-    redirect_to game_room_path(@game_room)
-  end
+      @game_room.players << @user
+      else
+        @game_room.viewers << @user
+      end
+      @game_room.save    
+      redirect_to game_room_path(@game_room)
+  
     
   end
 
