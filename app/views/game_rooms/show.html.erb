@@ -1,13 +1,14 @@
  <main>
  <p>Player one: <%= @game_room.players[0] ? @game_room.players[0].user_name : "waiting for opponent" %></p> <p>Player two: <%= @game_room.players[1] ? @game_room.players[1].user_name : "waiting for opponent" %></p>
      <div> <p>There are <%= @game_room.viewers.count %> watching</p></div> 
-     <div id="room-id" class="flex justify-center items-center width-screen h-screen <%= @message%> "  data-gameroom-id= "<%=@game_room.id%>">
-      
+     <div id="room-id" class="flex justify-center items-center width-screen h-screen <%= @message %> "  data-gameroom-id= "<%= @game_room.id %>">
+      <%= link_to "leave", leave_game_room_path(@game_room) %>
+      <button data-reflex="click->Game#restart_game">Restart game</button>
       <div id="test" class="inline-grid grid-cols-3" data-id= "test">
       <% @games.each do |game| %>
-      <div id="game_<%= game.place %>" class="grid grid-cols-3 game items-center justify-center board" data-game-id="<%=game.id%>"  dataset= "combined">
+      <div id="game_<%= game.place %>" class="grid grid-cols-3 game items-center justify-center board" data-game-id="<%= game.id %>"  dataset= "combined">
       <% game.cells.each do |cell| %>
-        <%= render(CellComponent.new({cell:cell})) %>
+        <%= render(CellComponent.new({ cell: cell })) %>
         <% end %>
       </div>
 

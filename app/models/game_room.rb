@@ -8,16 +8,25 @@ class GameRoom < ApplicationRecord
   serialize :viewers, Array
   # validates_length_of :users, maximum: 2
 
-  def join
-    if @game_room.players.count < 2
-      @game_room.players << @user
+  def join(user)
+   
+    unless self.players.any?(user) || self.viewers.any?(user)
+    if self.players.count < 2
+      self.players << user
       else
-        @game_room.viewers << @user
+       self.viewers << user
       end
-      @game_room.save
+      self.save  
+    end
+   
   end
 
-  def leave
-
+  def leave(user)
+    self.players.delete(user) || self.viewers.delete(user)
+    self.save
+  end
+  def restart
+    self.board.game_finishd = false
+    self.board.reset
   end
 end

@@ -11,15 +11,14 @@ class GameRoomsController < ApplicationController
     #Trying to make a joins table so I can link users to a game (and then use that to reject non linked users from the channel)
    
     @game_room = GameRoom.find(params[:id])
-    if @game_room.players.count < 2
-      @game_room.players << @user
-      else
-        @game_room.viewers << @user
-      end
-      @game_room.save    
-      redirect_to game_room_path(@game_room)
+   @game_room.join(current_or_guest_user)
+    redirect_to game_room_path(@game_room)
+  end
   
-    
+  def leave 
+    @game_room = GameRoom.find(params[:id])
+    @game_room.leave(current_or_guest_user)
+    redirect_to game_rooms_path
   end
 
   def new

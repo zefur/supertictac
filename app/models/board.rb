@@ -24,6 +24,13 @@ class Board < ApplicationRecord
       end
     end
   end
+def reset
+  self.games.each do |x|
+    x.game_won = false
+    x.cells.each {|y| y.nothing!}
+  end
+end
+
 
   WINNING_COMBOS = [
     [0, 1, 2],

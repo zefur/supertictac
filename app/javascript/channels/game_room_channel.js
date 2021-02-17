@@ -2,7 +2,6 @@ import CableReady from "cable_ready";
 import consumer from "./consumer";
 
 document.addEventListener("turbolinks:load", () => {
-  const playerLimit = 2;
   const element = document.getElementById("room-id");
   const room_id = element.getAttribute("data-gameroom-id");
   consumer.subscriptions.create(

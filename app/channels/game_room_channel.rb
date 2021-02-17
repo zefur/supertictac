@@ -6,7 +6,7 @@ class GameRoomChannel < ApplicationCable::Channel
   def subscribed
     room = GameRoom.find(params[:id])
     puts "*********************"
-    puts params
+    puts room.players
     puts "*********************"
     
     stream_for(GameRoom.find(params[:id]))

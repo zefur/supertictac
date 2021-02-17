@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :game_rooms do
   member do 
     get :join_match
+    get :leave
   end
 end
 end

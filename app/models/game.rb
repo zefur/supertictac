@@ -4,6 +4,12 @@ class Game < ApplicationRecord
   belongs_to :board
   has_many :cells, dependent: :destroy
 
+  player1_turn = true
+
+  def swap_turns 
+    player1_turn = !player1_turn
+  end
+
   def check_win
     WINNING_COMBOS.any? do |combos|
       combos.all? do |y|
