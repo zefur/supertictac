@@ -4,6 +4,7 @@ class GameReflex < ApplicationReflex
   delegate :current_or_guest_user, to: :connection
   delegate :session_id, to: :connection
   before_reflex :set_game_room
+  after_reflex :game_won
   # Add Reflex methods in this file.
   #
   # All Reflex instances include CableReady::Broadcaster and expose the following properties:
@@ -45,47 +46,60 @@ class GameReflex < ApplicationReflex
 
     if current_or_guest_user == @players[0]
       @cell.cross!
+      morph "#cell_#{@cell.id}", render(CellComponent.new({cell: @cell}))
+        cable_ready[GameRoomChannel].add_css_class(
+        selector: "#cell_#{@cell.id}",
+        name: "x",
+      )
     elsif current_or_guest_user == @players[1]
       @cell.nought!
+      morph "#cell_#{@cell.id}", render(CellComponent.new({cell: @cell, class: "circle"}))
+      cable_ready[GameRoomChannel].add_css_class(
+            selector: "#cell_#{@cell.id}",
+            name: "circle",
+          )
     end
     # @cell.choice
-    # The code here (43-69) has been refactored but is and should be deleted but when its deleted the highlighting stops working.
-    if @cell.cross?
-      morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
-      cable_ready.remove_css_class(
-        selector: "#cell_#{@cell.id}",
-        name: "m",
-      )
-      cable_ready.add_css_class(
-        selector: "#cell_#{@cell.id}",
-        name: "x",
-      )
-    elsif @cell.nought?
-      morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
-      cable_ready.remove_css_class(
-        selector: "#cell_#{@cell.id}",
-        name: "x",
-      )
-      cable_ready.add_css_class(
-        selector: "#cell_#{@cell.id}",
-        name: "circle",
-      )
-    elsif @cell.nothing?
-      morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
-      cable_ready.remove_css_class(
-        selector: "#cell_#{@cell.id}",
-        name: "circle",
-      )
-    end
-    #
+    # 
 
+    # The code here (43-69) has been refactored but is and should be deleted but when its deleted the highlighting stops working.
+    # if @cell.cross?
+    #   morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
+      
+    #   cable_ready.remove_css_class(
+    #     selector: "#cell_#{@cell.id}",
+    #     name: "m",
+    #   )
+    #   cable_ready.add_css_class(
+    #     selector: "#cell_#{@cell.id}",
+    #     name: "x",
+    #   )
+    # elsif @cell.nought?
+    #   morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
+    #   cable_ready.remove_css_class(
+    #     selector: "#cell_#{@cell.id}",
+    #     name: "x",
+    #   )
+    #   cable_ready.add_css_class(
+    #     selector: "#cell_#{@cell.id}",
+    #     name: "circle",
+    #   )
+    # elsif @cell.nothing?
+    #   morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
+    #   cable_ready.remove_css_class(
+    #     selector: "#cell_#{@cell.id}",
+    #     name: "circle",
+    #   )
+    # end
+    #
+    morph "#turn", "hello there how are you"
     @game = Game.find(@cell.place)
     @old_game = Game.find(@cell.game_id)
 
     # activates the next play area and deactivates all others
     cable_ready.remove_css_class(
       selector: "#game_#{@old_game.place}",
-      name: "bg-blue-300",
+      name: "ring-4",
     ).add_css_class(
       selector: "#test",
       name: "inactive",
@@ -96,15 +110,35 @@ class GameReflex < ApplicationReflex
       selector: "#game_#{@old_game.place}",
       name: "active",
     )
-    #  shows the next play area
+
     cable_ready[GameRoomChannel].add_css_class(
       selector: "#game_#{@game.place}",
-      name: "bg-blue-300",
-    ).broadcast_to(@game_room)
+      name: "ring-4",
+    )
+
+    
+  end
+
+  def game_won
+    @game_room.board.games.each do |x|
+      if x.check_win
+        cable_ready[GameRoomChannel].add_css_class(
+        selector: "#game_#{x.place}",
+        name: "bg-red-300",
+        ).broadcast_to(@game_room)
+      end
+    end
+    #  @game = Game.find(@cell.place)
+    # @old_game = Game.find(@cell.game_id)
+    # @hello = @old_game.check_win
+    # if @old_game.check_win
+      
+    # end
   end
 
   def restart_game
     @game_room.restart
+    
   end
 
   private

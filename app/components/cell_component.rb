@@ -3,7 +3,7 @@
 class CellComponent < ViewComponent::Base
   def initialize(attributes = {})
     @cell = attributes[:cell]
-    @message = attributes[:message]
+    @class = attributes[:class]
     @cell_counter
   end
 end

@@ -29,4 +29,8 @@ class GameRoom < ApplicationRecord
     self.board.game_finishd = false
     self.board.reset
   end
+
+  
+    
+
 end
