@@ -3,27 +3,23 @@
 class Board < ApplicationRecord
   has_many :games, dependent: :destroy
   belongs_to :game_room
-# this only connects some of the time and then it still doesnt broadcast
-  def self.start(player1, player2)
-    # Randomly choses who gets to be noughts or crosses
-    cross, nought = [player1, player2].shuffle
 
-    # Broadcast back to the players subscribed to the channel that the game has started
-    ActionCable.server.broadcast "player_#{cross}", { action: 'game_start', msg: 'Cross' }
-    ActionCable.server.broadcast "player_#{nought}", { action: 'game_start', msg: 'Nought' }
 
-    # Store the details of each opponent
-    REDIS.set("opponent_for:#{cross.user_name}", nought)
-    REDIS.set("opponent_for:#{nought.user_name}", cross)
-  end
-
-  def check_win
+  def check_cross
     WINNING_COMBOS.any? do |x|
       x.all? do |y|
         games[y].cross?
       end
     end
   end
+  def check_nought
+    WINNING_COMBOS.any? do |combos|
+      combos.all? do |y|
+        cells[y].nought?
+      end
+    end
+  end
+
 def reset
   self.games.each do |x|
     x.game_won = false

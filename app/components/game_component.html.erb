@@ -1,11 +1,11 @@
 
 
 
-      <div id="game_<%= game.place %>" class="grid grid-cols-3 game items-center justify-center board" data-game-id="<%= game.id %>"  dataset= "combined">
+      <div id="game_<%= @game.place %>" class="grid grid-cols-3 game items-center justify-center board" data-game-id="<%= @game.id %>"  dataset= "combined">
       <% @game.cells.each do |cell| %>
         <%= render(CellComponent.new({ cell: cell })) %>
         <% end %>
       </div>
 
        
-       <% end %>
+       

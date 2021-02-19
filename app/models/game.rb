@@ -10,10 +10,17 @@ class Game < ApplicationRecord
     player1_turn = !player1_turn
   end
 
-  def check_win
+  def check_cross
     WINNING_COMBOS.any? do |combos|
       combos.all? do |y|
         cells[y].cross?
+      end
+    end
+  end
+  def check_nought
+    WINNING_COMBOS.any? do |combos|
+      combos.all? do |y|
+        cells[y].nought?
       end
     end
   end

@@ -39,65 +39,28 @@ class GameReflex < ApplicationReflex
     # this is very messy could do with some tidying up but more/less works as planned
     @cell = Cell.find(element.dataset["cell-id"])
     @players = @game_room.players
-    puts "OooooooooOOOOO"
-
-    puts "OooooooooOOOOO"
-    @game_room
-
     if current_or_guest_user == @players[0]
       @cell.cross!
       morph "#cell_#{@cell.id}", render(CellComponent.new({cell: @cell}))
         cable_ready[GameRoomChannel].add_css_class(
         selector: "#cell_#{@cell.id}",
         name: "x",
-      )
+      ).broadcast_to(@game_room)
     elsif current_or_guest_user == @players[1]
       @cell.nought!
       morph "#cell_#{@cell.id}", render(CellComponent.new({cell: @cell, class: "circle"}))
       cable_ready[GameRoomChannel].add_css_class(
             selector: "#cell_#{@cell.id}",
             name: "circle",
-          )
+      ).broadcast_to(@game_room)
     end
-    # @cell.choice
-    # 
-
-    # The code here (43-69) has been refactored but is and should be deleted but when its deleted the highlighting stops working.
-    # if @cell.cross?
-    #   morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
-      
-    #   cable_ready.remove_css_class(
-    #     selector: "#cell_#{@cell.id}",
-    #     name: "m",
-    #   )
-    #   cable_ready.add_css_class(
-    #     selector: "#cell_#{@cell.id}",
-    #     name: "x",
-    #   )
-    # elsif @cell.nought?
-    #   morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
-    #   cable_ready.remove_css_class(
-    #     selector: "#cell_#{@cell.id}",
-    #     name: "x",
-    #   )
-    #   cable_ready.add_css_class(
-    #     selector: "#cell_#{@cell.id}",
-    #     name: "circle",
-    #   )
-    # elsif @cell.nothing?
-    #   morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
-    #   cable_ready.remove_css_class(
-    #     selector: "#cell_#{@cell.id}",
-    #     name: "circle",
-    #   )
-    # end
-    #
-    morph "#turn", "hello there how are you"
+   
+    
     @game = Game.find(@cell.place)
     @old_game = Game.find(@cell.game_id)
 
     # activates the next play area and deactivates all others
-    cable_ready.remove_css_class(
+    cable_ready[GameRoomChannel].remove_css_class(
       selector: "#game_#{@old_game.place}",
       name: "ring-4",
     ).add_css_class(
@@ -109,23 +72,27 @@ class GameReflex < ApplicationReflex
     ).remove_css_class(
       selector: "#game_#{@old_game.place}",
       name: "active",
-    )
-
-    cable_ready[GameRoomChannel].add_css_class(
+    ).add_css_class(
       selector: "#game_#{@game.place}",
       name: "ring-4",
-    )
+    ).broadcast_to(@game_room)
 
     
   end
 
   def game_won
+    # currently 
     @game_room.board.games.each do |x|
-      if x.check_win
+      if x.check_cross
         cable_ready[GameRoomChannel].add_css_class(
         selector: "#game_#{x.place}",
         name: "bg-red-300",
         ).broadcast_to(@game_room)
+      elsif x.check_nought
+        cable_ready[GameRoomChannel].add_css_class(
+          selector: "#game_#{x.place}",
+          name: "bg-green-300",
+          ).broadcast_to(@game_room)
       end
     end
     #  @game = Game.find(@cell.place)
@@ -138,7 +105,11 @@ class GameReflex < ApplicationReflex
 
   def restart_game
     @game_room.restart
-    
+    cable_ready[GameRoomChannel].morph(
+      selector: "#why",
+      children_only: true,
+      html: render(BoardComponent.new(board: @game_room.board))
+    ).broadcast_to(@game_room)
   end
 
   private

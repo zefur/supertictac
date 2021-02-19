@@ -4,15 +4,5 @@ class Cell < ApplicationRecord
   include CableReady::Broadcaster
 
   enum mark: { nothing: 0, cross: 1, nought: 2 }
-  belongs_to :game
-
-  def choice
-    if nothing?
-      cross!
-    elsif cross?
-      nought!
-    else
-      nothing!
-    end
-  end
+  belongs_to :game 
 end
