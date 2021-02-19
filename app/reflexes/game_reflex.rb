@@ -59,7 +59,7 @@ class GameReflex < ApplicationReflex
     @game = Game.find(@cell.place)
     @old_game = Game.find(@cell.game_id)
 
-    # activates the next play area and deactivates all others
+    # activates the next play area and deactivates all others (cableready highlighting lost on refresh)
     cable_ready[GameRoomChannel].remove_css_class(
       selector: "#game_#{@old_game.place}",
       name: "ring-4",
@@ -81,7 +81,7 @@ class GameReflex < ApplicationReflex
   end
 
   def game_won
-    # currently 
+    # checks if a game quadrant has been won (cableready highlighting lost on refresh)
     @game_room.board.games.each do |x|
       if x.check_cross
         cable_ready[GameRoomChannel].add_css_class(
@@ -95,15 +95,10 @@ class GameReflex < ApplicationReflex
           ).broadcast_to(@game_room)
       end
     end
-    #  @game = Game.find(@cell.place)
-    # @old_game = Game.find(@cell.game_id)
-    # @hello = @old_game.check_win
-    # if @old_game.check_win
-      
-    # end
   end
 
   def restart_game
+    # this works but want to move all CR to the models and autobroadcast on update
     @game_room.restart
     cable_ready[GameRoomChannel].morph(
       selector: "#why",

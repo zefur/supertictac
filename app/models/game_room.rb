@@ -50,5 +50,5 @@ class GameRoom < ApplicationRecord
     whose_turn = self.players[0] 
   end
 
-  @@current_player = self.players[0]
+  
 end
