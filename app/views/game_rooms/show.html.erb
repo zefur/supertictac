@@ -3,7 +3,7 @@
  <p>Player one: <%= @game_room.players[0] ? @game_room.players[0].user_name : "waiting for opponent" %></p> <p>Player two: <%= @game_room.players[1] ? @game_room.players[1].user_name : "waiting for opponent" %></p>
      <div> <p>There are <%= @game_room.viewers.count %> watching</p></div> 
      <div id="turn">
-     <p><%#= @game_room.current_player %></p>
+     <p><%= @thisgame  %></p>
      </div>
      <div id="room-id" class="flex justify-center items-center width-screen h-screen <%= @message %> "  data-gameroom-id= "<%= @game_room.id %>">
       <%= link_to "leave", leave_game_room_path(@game_room) %>

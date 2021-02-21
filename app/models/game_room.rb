@@ -16,6 +16,7 @@ class GameRoom < ApplicationRecord
   has_many :users, through: :game_room_users
   serialize :players, Array
   serialize :viewers, Array
+  enum player_turn: {player1: 0, player2: 1}
   # validates_length_of :users, maximum: 2
 
   def join(user)

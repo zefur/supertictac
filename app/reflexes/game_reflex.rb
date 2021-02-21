@@ -37,28 +37,36 @@ class GameReflex < ApplicationReflex
   # Learn more at: https://docs.stimulusreflex.com/reflexes#reflex-classes
   def click
     # this is very messy could do with some tidying up but more/less works as planned
+    
     @cell = Cell.find(element.dataset["cell-id"])
     @players = @game_room.players
-    if current_or_guest_user == @players[0]
-      @cell.cross!
-      morph "#cell_#{@cell.id}", render(CellComponent.new({cell: @cell}))
+    @game = Game.find(@cell.place)
+    @old_game = Game.find(@cell.game_id)
+   
+    if current_or_guest_user == @players[0] && @game_room.player1?
+      
+      @game_room.board.games[@game.id-1].open!
+     @old_game.closed!
+     @cell.cross!
+         morph "#cell_#{@cell.id}", render(CellComponent.new({cell: @cell}))
         cable_ready[GameRoomChannel].add_css_class(
         selector: "#cell_#{@cell.id}",
         name: "x",
       ).broadcast_to(@game_room)
-    elsif current_or_guest_user == @players[1]
+      @game_room.player2!
+    elsif current_or_guest_user == @players[1] && @game_room.player2?
       @cell.nought!
+      @game_room.board.games[@game.id-1].open!
+     @old_game.closed!
+     
       morph "#cell_#{@cell.id}", render(CellComponent.new({cell: @cell, class: "circle"}))
       cable_ready[GameRoomChannel].add_css_class(
             selector: "#cell_#{@cell.id}",
             name: "circle",
       ).broadcast_to(@game_room)
+     @game_room.player1!
     end
-   
     
-    @game = Game.find(@cell.place)
-    @old_game = Game.find(@cell.game_id)
-
     # activates the next play area and deactivates all others (cableready highlighting lost on refresh)
     cable_ready[GameRoomChannel].remove_css_class(
       selector: "#game_#{@old_game.place}",
@@ -83,18 +91,22 @@ class GameReflex < ApplicationReflex
   def game_won
     # checks if a game quadrant has been won (cableready highlighting lost on refresh)
     @game_room.board.games.each do |x|
+      
       if x.check_cross
+         x.cross! 
         cable_ready[GameRoomChannel].add_css_class(
         selector: "#game_#{x.place}",
         name: "bg-red-300",
         ).broadcast_to(@game_room)
       elsif x.check_nought
+        x.nought!
         cable_ready[GameRoomChannel].add_css_class(
           selector: "#game_#{x.place}",
           name: "bg-green-300",
           ).broadcast_to(@game_room)
       end
     end
+  
   end
 
   def restart_game
@@ -113,5 +125,6 @@ class GameReflex < ApplicationReflex
     @game_room = GameRoom.find(params[:id])
   end
 
+  
 
 end

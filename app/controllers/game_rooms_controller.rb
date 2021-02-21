@@ -27,7 +27,7 @@ class GameRoomsController < ApplicationController
   end
 
   def create
-    @game_room = GameRoom.create(server: current_or_guest_user)
+    @game_room = GameRoom.create()
 
     @board = Board.create(game_room_id: @game_room.id)
 

@@ -21,8 +21,10 @@ class Board < ApplicationRecord
   end
 
 def reset
+  
   self.games.each do |x|
     x.game_won = false
+    x.closed!
     x.cells.each {|y| y.nothing!}
   end
 end

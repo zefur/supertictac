@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 class Game < ApplicationRecord
+  include CableReady::Broadcaster
+  enum status: { closed: 0, open: 1 }
+  enum game_won: { playing: 0, cross: 1, nought: 2, draw: 3 }
   belongs_to :board
   has_many :cells, dependent: :destroy
 
-  player1_turn = true
-
-  def swap_turns 
-    player1_turn = !player1_turn
-  end
+  
 
   def check_cross
     WINNING_COMBOS.any? do |combos|
@@ -16,6 +15,7 @@ class Game < ApplicationRecord
         cells[y].cross?
       end
     end
+
   end
   def check_nought
     WINNING_COMBOS.any? do |combos|
