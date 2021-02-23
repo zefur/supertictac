@@ -7,12 +7,11 @@ Rails.application.routes.draw do
   get '/game', to: 'pages#game'
 
   get '/rooms', to: 'game_rooms#index'
- 
 
   resources :game_rooms do
-  member do 
-    get :join_match
-    get :leave
+    member do
+      get :join_match
+      get :leave
+    end
   end
-end
 end

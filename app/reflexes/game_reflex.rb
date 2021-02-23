@@ -4,7 +4,7 @@ class GameReflex < ApplicationReflex
   delegate :current_or_guest_user, to: :connection
   delegate :session_id, to: :connection
   before_reflex :set_game_room
-  after_reflex :game_won
+  after_reflex :game_won, :game_over
   # Add Reflex methods in this file.
   #
   # All Reflex instances include CableReady::Broadcaster and expose the following properties:
@@ -37,83 +37,79 @@ class GameReflex < ApplicationReflex
   # Learn more at: https://docs.stimulusreflex.com/reflexes#reflex-classes
   def click
     # this is very messy could do with some tidying up but more/less works as planned
-    
-    @cell = Cell.find(element.dataset["cell-id"])
+
+    @cell = Cell.find(element.dataset['cell-id'])
     @players = @game_room.players
     @game = Game.find(@cell.place)
     @old_game = Game.find(@cell.game_id)
-   
+#   while @game_room.started
     if current_or_guest_user == @players[0] && @game_room.player1?
-      
-      @game_room.board.games[@game.id-1].open!
-     @old_game.closed!
-     @cell.cross!
-         morph "#cell_#{@cell.id}", render(CellComponent.new({cell: @cell}))
-        cable_ready[GameRoomChannel].add_css_class(
+
+      @game_room.board.games[@game.id - 1].open!
+      @old_game.closed!
+      @cell.cross!
+      @cell.toggle(:empty)
+      morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
+      cable_ready[GameRoomChannel].add_css_class(
         selector: "#cell_#{@cell.id}",
-        name: "x",
+        name: 'x'
       ).broadcast_to(@game_room)
+      next_area
       @game_room.player2!
     elsif current_or_guest_user == @players[1] && @game_room.player2?
       @cell.nought!
-      @game_room.board.games[@game.id-1].open!
-     @old_game.closed!
-     
-      morph "#cell_#{@cell.id}", render(CellComponent.new({cell: @cell, class: "circle"}))
+      @cell.toggle(:empty)
+      @game_room.board.games[@game.id - 1].open!
+      @old_game.closed!
+      morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell, class: 'circle' }))
       cable_ready[GameRoomChannel].add_css_class(
-            selector: "#cell_#{@cell.id}",
-            name: "circle",
+        selector: "#cell_#{@cell.id}",
+        name: 'circle'
       ).broadcast_to(@game_room)
-     @game_room.player1!
+      next_area
+      @game_room.player1!
     end
-    
-    # activates the next play area and deactivates all others (cableready highlighting lost on refresh)
-    cable_ready[GameRoomChannel].remove_css_class(
-      selector: "#game_#{@old_game.place}",
-      name: "ring-4",
-    ).add_css_class(
-      selector: "#test",
-      name: "inactive",
-    ).add_css_class(
-      selector: "#game_#{@game.place}",
-      name: "active",
-    ).remove_css_class(
-      selector: "#game_#{@old_game.place}",
-      name: "active",
-    ).add_css_class(
-      selector: "#game_#{@game.place}",
-      name: "ring-4",
-    ).broadcast_to(@game_room)
+  # end
+  end
 
+  def game_over
     
+    if @game_room.board.check_cross
+      @message = "Crosses have won the game"
+    elsif @game_room.board.check_nought
+      @message = "Noughts have won the game"
+    end
+
   end
 
   def game_won
     # checks if a game quadrant has been won (cableready highlighting lost on refresh)
     @game_room.board.games.each do |x|
-      
       if x.check_cross
-         x.cross! 
+        x.cross!
         cable_ready[GameRoomChannel].add_css_class(
-        selector: "#game_#{x.place}",
-        name: "bg-red-300",
+          selector: "#game_#{x.place}",
+          name: 'bg-red-300'
         ).broadcast_to(@game_room)
       elsif x.check_nought
         x.nought!
         cable_ready[GameRoomChannel].add_css_class(
           selector: "#game_#{x.place}",
-          name: "bg-green-300",
-          ).broadcast_to(@game_room)
+          name: 'bg-green-300'
+        ).broadcast_to(@game_room)
       end
     end
-  
+  end
+
+  def start_game
+    @game_room.start
   end
 
   def restart_game
     # this works but want to move all CR to the models and autobroadcast on update
     @game_room.restart
     cable_ready[GameRoomChannel].morph(
-      selector: "#why",
+      selector: '#why',
       children_only: true,
       html: render(BoardComponent.new(board: @game_room.board))
     ).broadcast_to(@game_room)
@@ -125,6 +121,22 @@ class GameReflex < ApplicationReflex
     @game_room = GameRoom.find(params[:id])
   end
 
-  
-
+  def next_area
+    cable_ready[GameRoomChannel].remove_css_class(
+      selector: "#game_#{@old_game.place}",
+      name: 'ring-4'
+    ).remove_css_class(
+      selector: "#game_#{@old_game.place}",
+      name: 'active'
+    ).add_css_class(
+      selector: '#test',
+      name: 'inactive'
+    ).add_css_class(
+      selector: "#game_#{@game.place}",
+      name: 'active'
+    ).add_css_class(
+      selector: "#game_#{@game.place}",
+      name: 'ring-4'
+    ).broadcast_to(@game_room)
+  end
 end

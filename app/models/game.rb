@@ -7,16 +7,14 @@ class Game < ApplicationRecord
   belongs_to :board
   has_many :cells, dependent: :destroy
 
-  
-
   def check_cross
     WINNING_COMBOS.any? do |combos|
       combos.all? do |y|
         cells[y].cross?
       end
     end
-
   end
+
   def check_nought
     WINNING_COMBOS.any? do |combos|
       combos.all? do |y|

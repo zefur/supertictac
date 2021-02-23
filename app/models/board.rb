@@ -4,7 +4,6 @@ class Board < ApplicationRecord
   has_many :games, dependent: :destroy
   belongs_to :game_room
 
-
   def check_cross
     WINNING_COMBOS.any? do |x|
       x.all? do |y|
@@ -12,23 +11,26 @@ class Board < ApplicationRecord
       end
     end
   end
+
   def check_nought
     WINNING_COMBOS.any? do |combos|
       combos.all? do |y|
-        cells[y].nought?
+        games[y].nought?
       end
     end
   end
 
-def reset
-  
-  self.games.each do |x|
-    x.game_won = false
-    x.closed!
-    x.cells.each {|y| y.nothing!}
+  def reset
+    games.each do |x|
+      x.game_won = false
+      x.closed!
+      x.cells.each(&:nothing!)
+      x.cells.each do |cell|
+        cell.empty = true
+        cell.save
+      end
+    end
   end
-end
-
 
   WINNING_COMBOS = [
     [0, 1, 2],

@@ -2,15 +2,5 @@
 
 class PagesController < ApplicationController
   include CableReady::Broadcaster
-  def home
-    
-  end
-
- 
-  
- 
-
-  private
-
-  
+  def home; end
 end

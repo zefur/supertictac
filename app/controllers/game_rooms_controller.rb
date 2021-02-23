@@ -3,19 +3,19 @@
 class GameRoomsController < ApplicationController
   before_action :set_game_rooms
   include CableReady::Broadcaster
-  def index; 
+  def index
     @game_rooms
   end
 
-  def join_match 
-    #Trying to make a joins table so I can link users to a game (and then use that to reject non linked users from the channel)
-   
+  def join_match
+    # Trying to make a joins table so I can link users to a game (and then use that to reject non linked users from the channel)
+
     @game_room = GameRoom.find(params[:id])
-   @game_room.join(current_or_guest_user)
+    @game_room.join(current_or_guest_user)
     redirect_to game_room_path(@game_room)
   end
-  
-  def leave 
+
+  def leave
     @game_room = GameRoom.find(params[:id])
     @game_room.leave(current_or_guest_user)
     redirect_to game_rooms_path
@@ -27,7 +27,7 @@ class GameRoomsController < ApplicationController
   end
 
   def create
-    @game_room = GameRoom.create()
+    @game_room = GameRoom.create
 
     @board = Board.create(game_room_id: @game_room.id)
 
@@ -69,7 +69,7 @@ class GameRoomsController < ApplicationController
   end
 
   def game_room_users_params
-    params.permit(:game_room_id,:user_id)
+    params.permit(:game_room_id, :user_id)
   end
 
   def set_game_rooms
