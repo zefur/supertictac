@@ -5,6 +5,7 @@
      <div>
      <p><%= @game_room.player_turn %>  <%= @message %></p>
      </div>
+     <button class="text-2xl bg-gray-200 py-2 px-1" data-reflex="click->Game#start_game"> Start Game </button>
      <div id="room-id" class="flex justify-center items-center width-screen h-screen <%= @message %> "  data-gameroom-id= "<%= @game_room.id %>">
       <div class="flex-col m-auto">
       <p>Player one: </p><p><%= @game_room.players[0] ? @game_room.players[0].user_name : "waiting for opponent" %></p>

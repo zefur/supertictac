@@ -1,4 +1,4 @@
-<div id="test" class="inline-grid grid-cols-3 <%=@board.started? ? "inactive": "" %>" data-id= "test">
+<div id="test" class="inline-grid grid-cols-3 <%#=@board.started? ? "inactive": "" %>" data-id= "test">
       <% @board.games.each do |game| %>
 
       <%= render(GameComponent.new(game: game)) %>

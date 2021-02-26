@@ -3,7 +3,7 @@
 class GameReflex < ApplicationReflex
   delegate :current_or_guest_user, to: :connection
   delegate :session_id, to: :connection
-  before_reflex :set_game_room
+  before_reflex :set_game_room, :info
   after_reflex :game_won, :game_over
   # Add Reflex methods in this file.
   #
@@ -39,27 +39,38 @@ class GameReflex < ApplicationReflex
     # this is very messy could do with some tidying up but more/less works as planned
 
     @cell = Cell.find(element.dataset['cell-id'])
+    @board = @game_room.board
     @players = @game_room.players
-    @game = Game.find(@cell.place)
+    # This gives a number from 1-9 to reference a game in the board by position
+    @index = @cell.place 
+    # this finds the actual game by ID
     @old_game = Game.find(@cell.game_id)
-#   while @game_room.started
-    if current_or_guest_user == @players[0] && @game_room.player1?
 
-      @game_room.board.games[@game.id - 1].open!
-      @old_game.closed!
-      @cell.cross!
-      @cell.toggle(:empty)
+    if current_or_guest_user == @players[0] && @game_room.player1?
+     @board.make_cross_move(@cell) 
+     
+      # makes a game active and deactivates the previous game square
+      # @game_room.board.games[@index - 1].open!
+      # @old_game.closed!
+      
+      # places mark
+      # @cell.cross!
+      # @cell.toggle(:empty)
+
+      # this updates the page and shows the changes and broadcasts it to the people in the room
       morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
       cable_ready[GameRoomChannel].add_css_class(
         selector: "#cell_#{@cell.id}",
         name: 'x'
       ).broadcast_to(@game_room)
       next_area
-      @game_room.player2!
+      #  @game_room.player2!
+       cpu 
     elsif current_or_guest_user == @players[1] && @game_room.player2?
+      # @game_room.players[1].compMove.nought!
       @cell.nought!
-      @cell.toggle(:empty)
-      @game_room.board.games[@game.id - 1].open!
+      @cell.toggle(:free)
+      @game_room.board.games[@index - 1].open!
       @old_game.closed!
       morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell, class: 'circle' }))
       cable_ready[GameRoomChannel].add_css_class(
@@ -102,7 +113,16 @@ class GameReflex < ApplicationReflex
   end
 
   def start_game
-    @game_room.start
+    if @game_room.players.count == 2
+      @game_room.start
+    else
+      cpu = Computer.new( {board: @game_room.board})
+      @game_room.players << cpu
+      @game_room.save
+      @game_room.start
+      
+    end
+    
   end
 
   def restart_game
@@ -121,6 +141,28 @@ class GameReflex < ApplicationReflex
     @game_room = GameRoom.find(params[:id])
   end
 
+  def cpu
+
+     @game_room.board.make_move_computer
+    
+    # ComputerMoveJob.perform_later
+    # @cell.toggle(:free)
+    # @game_room.board.games[@index - 1].open!
+    # @old_game.closed!
+    # morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell, class: 'circle' }))
+    # cable_ready[GameRoomChannel].add_css_class(
+    #   selector: "#cell_#{@cell.id}",
+    #   name: 'circle'
+    # ).broadcast_to(@game_room)
+    # next_area
+    @game_room.player1!
+  end
+
+def info
+  puts @game_room.board.games.ids
+  puts @game_room.board.games.each {|x| x.place}
+end
+
   def next_area
     cable_ready[GameRoomChannel].remove_css_class(
       selector: "#game_#{@old_game.place}",
@@ -132,10 +174,10 @@ class GameReflex < ApplicationReflex
       selector: '#test',
       name: 'inactive'
     ).add_css_class(
-      selector: "#game_#{@game.place}",
+      selector: "#game_#{@index}",
       name: 'active'
     ).add_css_class(
-      selector: "#game_#{@game.place}",
+      selector: "#game_#{@index}",
       name: 'ring-4'
     ).broadcast_to(@game_room)
   end
