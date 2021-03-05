@@ -44,29 +44,19 @@ class Board < ApplicationRecord
   ].freeze
 @move_list = []
   def make_move_computer
-    game = self.games.find_by(status: "open")
-
-    self.game_room.players[1].make_move(game)
-    # game.cells.each do |cell|
-    #   if cell.empty?
-    #     @move_list << cell
-    #     cell.nought!
-    #     cell.toggle(:free)
-    #     self.games[cell.place - 1]
-    #   end
-    # end
-    # make_nought_move()
+     game = self
+     comp_move = self.game_room.players[1].run_search(game)
+     make_nought_move(comp_move)
+    
   end
 
   def undo(cell)
       cell.nothing?
       cell.toggle(:free)
-   
   end
 
 
   def make_cross_move(cell)
-    
     cell.cross!
     cell.toggle(:free)
     activate_next(cell)
@@ -74,7 +64,6 @@ class Board < ApplicationRecord
   end
 
   def make_nought_move(cell)
-    
     cell.nought!
     cell.toggle(:free)
     activate_next(cell)
@@ -92,12 +81,47 @@ class Board < ApplicationRecord
     game.closed!
   end
 
-  def cpu_next_place(cell)
-    self.deactivate_last(cell)
-    self.activate_next(cell)
-    cell.game
-
-
+  def cpu_activate_next(cell)
+    index = cell.place - 1
+    self.games[index].status = "open"
   end
 
+  def cpu_deactivate_last(cell)
+    game = Game.find(cell.game_id)
+    game.status = "closed"
+  end
+
+  def computer_predict(cell)
+    self.cpu_activate_next(cell)
+    self.cpu_deactivate_last(cell)
+    game = self.games[cell.place - 1]
+    game
+  end
+
+
+  # methods for the MCTS algorithm
+
+  def legal_plays(board)
+    plays = board.games.find_by(status: "open").cells.where(free: true)
+    puts "11111111"
+    p plays.class
+    p plays
+    plays
+  end
+
+  def next_state(state, move)
+state.game.where(status: "open")
+computer_predict(move)
+  end
+
+  def winner(state)
+    if check_cross
+      -1
+    elsif check_nought
+      1
+    else
+      0
+    end
+
+  end
 end

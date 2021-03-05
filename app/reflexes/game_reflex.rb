@@ -64,10 +64,11 @@ class GameReflex < ApplicationReflex
         name: 'x'
       ).broadcast_to(@game_room)
       next_area
-      #  @game_room.player2!
-       cpu 
+       @game_room.player2!
+      #  uncomment below to work on the cpu functionality
+        #  cpu 
     elsif current_or_guest_user == @players[1] && @game_room.player2?
-      # @game_room.players[1].compMove.nought!
+      
       @cell.nought!
       @cell.toggle(:free)
       @game_room.board.games[@index - 1].open!
@@ -80,15 +81,17 @@ class GameReflex < ApplicationReflex
       next_area
       @game_room.player1!
     end
-  # end
+  
   end
 
   def game_over
     
     if @game_room.board.check_cross
       @message = "Crosses have won the game"
+      @game_room.board.toggle(:game_finishd)
     elsif @game_room.board.check_nought
       @message = "Noughts have won the game"
+      @game_room.board.toggle(:game_finishd)
     end
 
   end
@@ -145,7 +148,7 @@ class GameReflex < ApplicationReflex
 
      @game_room.board.make_move_computer
     
-    # ComputerMoveJob.perform_later
+    #  ComputerMoveJob.perform_later
     # @cell.toggle(:free)
     # @game_room.board.games[@index - 1].open!
     # @old_game.closed!
