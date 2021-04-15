@@ -1,0 +1,11 @@
+<%= @user.user_name %>
+<% if @user.type == "Guest" %>
+  <p> This is a guest account so unfortunately the stats accrued will not be saved when you leave </p>
+  <p>Sorry the developer is an idiot</p>
+<% end %>
+<div>
+  <h2>Stats</h2>
+</div>
+<p>Wins: <%= @user.wins %></p>
+<p>Losses: <%= @user.losses %></p>
+<p>Draws: <%= @user.draws %></p>

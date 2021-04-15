@@ -1,0 +1,5 @@
+<div class="sticky top-0 w-full bg-gray-300" >
+  <% if !current_user.nil? %>
+    <%= link_to 'sign out', destroy_user_session_path %>
+  <% end %>
+</div>

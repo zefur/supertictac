@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class GameReflex < ApplicationReflex
-  delegate :current_or_guest_user, to: :connection
+  delegate :current_user, to: :connection
   delegate :session_id, to: :connection
   before_reflex :set_game_room, :info
   after_reflex :game_won, :game_over
@@ -46,7 +46,7 @@ class GameReflex < ApplicationReflex
     # this finds the actual game by ID
     @old_game = Game.find(@cell.game_id)
 
-    if current_or_guest_user == @players[0] && @game_room.player1?
+    if current_user == @players[0] && @game_room.player1?
      @board.make_cross_move(@cell) 
      
       # makes a game active and deactivates the previous game square
@@ -64,10 +64,10 @@ class GameReflex < ApplicationReflex
         name: 'x'
       ).broadcast_to(@game_room)
       next_area
-       @game_room.player2!
+      @game_room.player2!
       #  uncomment below to work on the cpu functionality
         #  cpu 
-    elsif current_or_guest_user == @players[1] && @game_room.player2?
+    elsif current_user == @players[1] && @game_room.player2?
       
       @cell.nought!
       @cell.toggle(:free)
@@ -88,12 +88,26 @@ class GameReflex < ApplicationReflex
     
     if @game_room.board.check_cross
       @message = "Crosses have won the game"
+      puts @message
       @game_room.board.toggle(:game_finishd)
+      cable_ready.remove_css_class(
+        selector: "#win-message",
+        name: "opacity-0"
+      ).add_css_class(
+        selector: "#win-message",
+        name: "opacity-95"
+      )
     elsif @game_room.board.check_nought
       @message = "Noughts have won the game"
       @game_room.board.toggle(:game_finishd)
+      cable_ready.remove_css_class(
+        selector: "#win-message",
+        name: "opacity-0"
+      ).add_css_class(
+        selector: "#win-message",
+        name: "opacity-95"
+      )
     end
-
   end
 
   def game_won
@@ -141,7 +155,7 @@ class GameReflex < ApplicationReflex
   private
 
   def set_game_room
-    @game_room = GameRoom.find(params[:id])
+    @game_room = GameRoom.friendly.find(params[:id])
   end
 
   def cpu

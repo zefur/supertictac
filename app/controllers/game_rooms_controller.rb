@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class GameRoomsController < ApplicationController
+  helper_method :current_user
   before_action :set_game_rooms
   include CableReady::Broadcaster
   def index
@@ -10,27 +11,29 @@ class GameRoomsController < ApplicationController
   def join_match
     # Trying to make a joins table so I can link users to a game (and then use that to reject non linked users from the channel)
 
-    @game_room = GameRoom.find(params[:id])
-    @game_room.join(current_or_guest_user)
+    @game_room = GameRoom.friendly.find(params[:id])
+    @game_room.join(current_user)
     redirect_to game_room_path(@game_room)
   end
 
   def leave
-    @game_room = GameRoom.find(params[:id])
-    @game_room.leave(current_or_guest_user)
+    @game_room = GameRoom.friendly.find(params[:id])
+    @game_room.leave(current_user)
+    
     redirect_to game_rooms_path
   end
 
   def new
     @game_room = GameRoom.new
     @board = Board.new
+    @user
   end
 
   def create
-    @game_room = GameRoom.create
-
+    @game_room = GameRoom.create!(game_room_params)
+    
+    if @game_room.save
     @board = Board.create(game_room_id: @game_room.id)
-
     Game.create(board_id: @board.id, place: 1)
     Game.create(board_id: @board.id, place: 2)
     Game.create(board_id: @board.id, place: 3)
@@ -52,12 +55,15 @@ class GameRoomsController < ApplicationController
       Cell.create(game_id: game.id, place: 8)
       Cell.create(game_id: game.id, place: 9)
     end
-
+       else 
+    raise
+    end
+    @game_room.join(current_user)
     redirect_to game_room_path(@game_room)
   end
 
   def show
-    @game_room = GameRoom.find(params[:id])
+    @game_room = GameRoom.friendly.find(params[:id])
     @board = @game_room.board
     @games = @board.games
   end
@@ -65,15 +71,13 @@ class GameRoomsController < ApplicationController
   private
 
   def game_room_params
-    params.require(:game_room).permit(:server)
+    params.require(:game_room).permit(:room_name, :user_id)
   end
 
-  def game_room_users_params
-    params.permit(:game_room_id, :user_id)
-  end
+
 
   def set_game_rooms
     @game_rooms = GameRoom.all
-    @user = current_user
+    @user = current_or_guest_user
   end
 end

@@ -1,25 +1,32 @@
  <body>
-     <div class="text-center justify-center items-center fixed content-center block m-auto w-screen">
-       <% if @old_game %><%= @old_game.id %> 
-       <% end %> 
-       <%= current_or_guest_user.user_name %>
-       <% if @game %>
-         <%= @game.id %>
-       <% end %>
-        
-        <h1 class="text-center text-2xl">
-    Hi welcome to SuperTicTac
-    </h1>
-    <p>I hope you don't mind but we've given you a username for this sessions from now on you will be known as <%= current_or_guest_user.user_name %></p>
-     <p>If you would like to change it feel free to sign up, it comes with <em>added</em> benefits</p>
-    <%= link_to 'start match', new_game_room_path %>   <%= link_to 'Game rooms', game_rooms_path %>
-     </div> 
-    <main>
-    <div class="bg-blue-200 grid grid-cols-3"> 
-    <div class="row-span-3">
-    
+  <%= render partial: 'shared/nav' %>
+  <h1> <% if user_signed_in? %>
+      <%= current_user.user_name %>
+    <% end %>
+  </h1>
+  <div>
+  </div>
+  <main>
+    <div class="text-center justify-center items-center fixed content-center block m-auto w-screen">
+      <% if @old_game %><%= @old_game.id %>
+      <% end %>
+      <% if @game %>
+        <%= @game.id %>
+      <% end %>
+      <h1 class="text-center text-2xl">
+        Hi welcome to SuperTicTac
+      </h1>
+      <p>I hope you don't mind but we've given you a username for this sessions from now on you will be known as </p>
+      <p>If you would like to change it feel free to sign up, it comes with <em>added</em> benefits</p>
+      <div>
+        <p> would you like to  <%= link_to 'sign up', new_user_registration_path, class:"text-blue-300 hover:text-blue-500" %> or join as a <%= link_to 'guest', guest_path, method: :post, class: "text-green-300 hover:text-blue-500"%>  for now? 
+        </div>
+        <% if !current_user.nil? %>
+          <div class= "my-6">
+            <%= link_to 'start match', new_game_room_path, class: "py-2 px-4  bg-blue-700 hover:bg-blue-800 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg" %>   <%= link_to 'Game rooms', game_rooms_path, class: "py-2 px-4  bg-blue-700 hover:bg-blue-800 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg " %>
+          </div>
+        <% end %>
+      </div>
     </div>
-    </div>
-    </main>
-  </body> 
-  
+  </main>
+</body>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_25_170224) do
+ActiveRecord::Schema.define(version: 2021_04_14_034157) do
 
   create_table "boards", force: :cascade do |t|
     t.boolean "game_finishd", default: false
@@ -31,6 +31,17 @@ ActiveRecord::Schema.define(version: 2021_02_25_170224) do
     t.index ["game_id"], name: "index_cells_on_game_id"
   end
 
+  create_table "friendly_id_slugs", force: :cascade do |t|
+    t.string "slug", null: false
+    t.integer "sluggable_id", null: false
+    t.string "sluggable_type", limit: 50
+    t.string "scope"
+    t.datetime "created_at"
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
+    t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
+    t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
   create_table "game_room_users", force: :cascade do |t|
     t.integer "game_room_id", null: false
     t.integer "user_id", null: false
@@ -46,6 +57,11 @@ ActiveRecord::Schema.define(version: 2021_02_25_170224) do
     t.integer "player_turn", default: 0
     t.text "players"
     t.text "viewers"
+    t.string "slug"
+    t.string "room_name"
+    t.integer "user_id"
+    t.index ["slug"], name: "index_game_rooms_on_slug", unique: true
+    t.index ["user_id"], name: "index_game_rooms_on_user_id"
   end
 
   create_table "games", force: :cascade do |t|
@@ -70,6 +86,7 @@ ActiveRecord::Schema.define(version: 2021_02_25_170224) do
     t.integer "losses", default: 0
     t.integer "draws", default: 0
     t.string "user_name"
+    t.string "type"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -78,5 +95,6 @@ ActiveRecord::Schema.define(version: 2021_02_25_170224) do
   add_foreign_key "cells", "games"
   add_foreign_key "game_room_users", "game_rooms"
   add_foreign_key "game_room_users", "users"
+  add_foreign_key "game_rooms", "users"
   add_foreign_key "games", "boards"
 end

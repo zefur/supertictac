@@ -15,10 +15,6 @@ class Node
          @children = attr[:children].map do |play|
             Hash[[[play.to_json({:only => [:mark, :free]}) , {play: play, node: nil}]]]
          end
-         
-         
-            #  {|play| [[[play.to_json(:include => {:games =>{:include => {:cells =>{:only => [:mark, :free]}}, :only =>[:game_won, :status]}}), {play:play, node: nil }]]]}
-            # Hash[[[play.to_json(:include => {:games =>{:include => {:cells =>{:only => [:mark, :free]}}, :only =>[:game_won, :status]}}) , {play:play, node: nil}]]]
     end
 
     def child_node(play)
@@ -55,8 +51,6 @@ class Node
 
     def fully_expanded?
         self.children.each  do |child|
-          
-# binding.pry
             if child["{\"free\":true,\"mark\":\"nothing\"}"][:node] == nil
                 false
             end

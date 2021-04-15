@@ -1,4 +1,9 @@
 <%= form_for @game_room do |f| %>
-<%= f.submit "Submit", disable_with: 'Submiting...' %>
-
+  <%= f.label "Game Room Name" %>
+  <%= f.text_field :room_name %>
+  <%= f.hidden_field :user_id, value: current_or_guest_user.id %>
+  <%= f.submit "Submit", disable_with: 'Submiting...' %>
+<% end %>
+<% if 1 < 2 %>
+  <%= render(ModalComponent.new(message: "hello")) %>
 <% end %>

@@ -87,6 +87,7 @@ class Board < ApplicationRecord
   end
 
   def cpu_deactivate_last(cell)
+    cell.free = false
     game = Game.find(cell.game_id)
     game.status = "closed"
   end

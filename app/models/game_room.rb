@@ -2,22 +2,17 @@
 
 class GameRoom < ApplicationRecord
   include CableReady::Broadcaster
-  # this doesnt work, trying to abstract it out from the reflex controller 
-  # delegate :render, to: :ApplicationController
-  # after_update do
-  #   cable_ready[GameRoomChannel].morph(
-  #     selector: "#why",
-  #     children_only: true,
-  #     html: render(BoardComponent.new({board: self.board}))
-  #   ).broadcast_to(self)
-  # end
+  
+  extend FriendlyId
+  
+  belongs_to :user
+  friendly_id :room_name, use: :slugged
+  
   has_one :board, dependent: :destroy
-  has_many :game_room_users, dependent: :destroy
-  has_many :users, through: :game_room_users
   serialize :players, Array
   serialize :viewers, Array
   enum player_turn: {player1: 0, player2: 1}
-  # validates_length_of :users, maximum: 2
+
 
   def join(user)
     unless self.players.any?(user) || self.viewers.any?(user)
@@ -33,6 +28,9 @@ class GameRoom < ApplicationRecord
   
   def leave(user)
     self.players.delete(user) || self.viewers.delete(user)
+    # if self.players.count == 0
+    #   self.destroy
+    # end
     self.save
   end
 
