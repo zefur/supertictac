@@ -23,6 +23,7 @@ class GameRoom < ApplicationRecord
       end
       self.save  
     end
+    
   end
 
   

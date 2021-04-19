@@ -42,9 +42,16 @@
             </div>
           </div>
           <div class="mt-4">
-            <button type="button" class="py-2 px-4  bg-blue-700 hover:bg-blue-800 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg ">
-              <%= link_to "Join Room",  join_match_game_room_path(game_room, {user_id:current_user}) %>
-            </button>
+            <div class="flex">
+              <button type="button" class="py-2 px-4  bg-blue-700 hover:bg-blue-800 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg ">
+                <%= link_to "Join Room",  join_match_game_room_path(game_room, {user_id:current_user}) %>
+              </button>
+              <% if current_or_guest_user.id == game_room.user_id %>
+                <div type="button" class="py-2 px-4  bg-red-700 hover:bg-red-800 focus:ring-red-500 focus:ring-offset-red-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg ">
+                  <%= link_to "Destroy Room",  game_room_path(game_room), method: :delete %>
+                </div>
+              <% end %>
+            </div>
           </div>
         </div>
       </div>

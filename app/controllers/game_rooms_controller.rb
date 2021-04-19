@@ -4,6 +4,7 @@ class GameRoomsController < ApplicationController
   helper_method :current_user
   before_action :set_game_rooms
   include CableReady::Broadcaster
+  require 'faker'
   def index
     @game_rooms
   end
@@ -30,7 +31,12 @@ class GameRoomsController < ApplicationController
   end
 
   def create
-    @game_room = GameRoom.create!(game_room_params)
+    
+
+    
+    
+    @game_room = GameRoom.new(game_room_params)
+    @game_room.room_name ||= "#{@user}'s #{Faker::Color.color_name} room"
     
     if @game_room.save
     @board = Board.create(game_room_id: @game_room.id)
@@ -64,8 +70,16 @@ class GameRoomsController < ApplicationController
 
   def show
     @game_room = GameRoom.friendly.find(params[:id])
+    @game_room.join(current_user)
     @board = @game_room.board
     @games = @board.games
+  end
+
+
+  def destroy
+    @game_room = GameRoom.friendly.find(params[:id])
+    @game_room.destroy
+    redirect_to root_path
   end
 
   private

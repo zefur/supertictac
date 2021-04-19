@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
    include DeviseWhitelist
+   include CableReady::Broadcaster
   #  protect_from_forgery
   
   # include CurrentUserConcern

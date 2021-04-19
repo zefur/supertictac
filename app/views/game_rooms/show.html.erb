@@ -7,13 +7,17 @@
     <div>
       <p><%= @game_room.player_turn %>  <%= @message %></p>
     </div>
-    <button class="text-2xl bg-gray-200 py-2 px-1" data-reflex="click->Game#start_game"> Start Game </button>
+    <% if @game_room.players.count != 2 %>
+      <p> Waiting for opponent</p>
+    <% else %>
+      <button class="text-2xl bg-gray-200 py-2 px-1 disabled" data-reflex="click->Game#start_game"> Start Game </button>
+    <% end %>
     <div id="room-id" class="flex justify-center items-center  <%= @message %> "  data-gameroom-id= "<%= @game_room.id %>">
       <div class="flex-col m-auto">
         <p>Player one: </p>
         <p><%= @game_room.players[0] ? @game_room.players[0].user_name : "waiting for opponent" %></p>
       </div>
-      <div id="why">
+      <div id="why" class="<%= @game_room.board.game_finishd ? "inactive" : "active" %> ">
         <%= render(BoardComponent.new({board: @game_room.board})) %>
       </div>
       <div class="flex-col m-auto">
@@ -28,5 +32,8 @@
   </div>
 </div>
 </div>
-<%= render(ModalComponent.new(message: @message)) %>
+<div data-reflex='click->GameReflex#test'>This is the test</div>
+<div id="win-area">
+</div>
+<%= render(ModalComponent.new(message: @message, game_room: @game_room)) %>
 </main>

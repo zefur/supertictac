@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_14_034157) do
+ActiveRecord::Schema.define(version: 2021_04_19_044221) do
+
+  create_table "board_hierarchies", id: false, force: :cascade do |t|
+    t.integer "ancestor_id", null: false
+    t.integer "descendant_id", null: false
+    t.integer "generations", null: false
+    t.index ["ancestor_id", "descendant_id", "generations"], name: "board_anc_desc_idx", unique: true
+    t.index ["descendant_id"], name: "board_desc_idx"
+  end
 
   create_table "boards", force: :cascade do |t|
     t.boolean "game_finishd", default: false
@@ -18,6 +26,7 @@ ActiveRecord::Schema.define(version: 2021_04_14_034157) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "game_room_id"
     t.boolean "started", default: false
+    t.integer "parent_id"
     t.index ["game_room_id"], name: "index_boards_on_game_room_id"
   end
 

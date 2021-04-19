@@ -4,6 +4,7 @@ class Board < ApplicationRecord
   has_many :games, dependent: :destroy
   belongs_to :game_room
   attr_accessor :move_list
+  has_closure_tree
   def check_cross
     WINNING_COMBOS.any? do |x|
       x.all? do |y|

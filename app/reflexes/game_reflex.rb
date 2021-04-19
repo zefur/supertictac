@@ -36,8 +36,6 @@ class GameReflex < ApplicationReflex
   #
   # Learn more at: https://docs.stimulusreflex.com/reflexes#reflex-classes
   def click
-    # this is very messy could do with some tidying up but more/less works as planned
-
     @cell = Cell.find(element.dataset['cell-id'])
     @board = @game_room.board
     @players = @game_room.players
@@ -45,18 +43,8 @@ class GameReflex < ApplicationReflex
     @index = @cell.place 
     # this finds the actual game by ID
     @old_game = Game.find(@cell.game_id)
-
     if current_user == @players[0] && @game_room.player1?
      @board.make_cross_move(@cell) 
-     
-      # makes a game active and deactivates the previous game square
-      # @game_room.board.games[@index - 1].open!
-      # @old_game.closed!
-      
-      # places mark
-      # @cell.cross!
-      # @cell.toggle(:empty)
-
       # this updates the page and shows the changes and broadcasts it to the people in the room
       morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
       cable_ready[GameRoomChannel].add_css_class(
@@ -64,11 +52,11 @@ class GameReflex < ApplicationReflex
         name: 'x'
       ).broadcast_to(@game_room)
       next_area
+      game_over
       @game_room.player2!
       #  uncomment below to work on the cpu functionality
         #  cpu 
     elsif current_user == @players[1] && @game_room.player2?
-      
       @cell.nought!
       @cell.toggle(:free)
       @game_room.board.games[@index - 1].open!
@@ -79,35 +67,47 @@ class GameReflex < ApplicationReflex
         name: 'circle'
       ).broadcast_to(@game_room)
       next_area
+      game_over
       @game_room.player1!
     end
-  
   end
 
   def game_over
-    
     if @game_room.board.check_cross
       @message = "Crosses have won the game"
-      puts @message
       @game_room.board.toggle(:game_finishd)
-      cable_ready.remove_css_class(
+      cable_ready[GameRoomChannel].remove_css_class(
         selector: "#win-message",
-        name: "opacity-0"
+        name: ["opacity-0","pointer-events-none"]
       ).add_css_class(
         selector: "#win-message",
-        name: "opacity-95"
-      )
+        name: ["opacity-95","point-events-auto"]
+      ).broadcast_to(@game_room)
     elsif @game_room.board.check_nought
       @message = "Noughts have won the game"
       @game_room.board.toggle(:game_finishd)
-      cable_ready.remove_css_class(
+      cable_ready[GameRoomChannel].remove_css_class(
         selector: "#win-message",
-        name: "opacity-0"
+        name: ["opacity-0","pointer-events-none"]
       ).add_css_class(
         selector: "#win-message",
-        name: "opacity-95"
-      )
+        name: ["opacity-95","point-events-auto"]
+      ).broadcast_to(@game_room)
     end
+  end
+
+  def test 
+    @message = "this is a test"
+    cable_ready[GameRoomChannel].add_css_class(
+       selector:"#why",
+       name: "inactive"
+    ).remove_css_class(
+      selector: "#win-message",
+      name: ["opacity-0","pointer-events-none"]
+    ).add_css_class(
+      selector: "#win-message",
+      name: ["opacity-95","point-events-auto"]
+    ).broadcast_to(@game_room)
   end
 
   def game_won
