@@ -45,9 +45,17 @@ class Board < ApplicationRecord
   ].freeze
 @move_list = []
   def make_move_computer
-     game = self
-     comp_move = self.game_room.players[1].run_search(game)
-     make_nought_move(comp_move)
+    puts "letters"
+    game = self.games.where(status: "open")
+    puts "my"
+    puts game
+    empty_cells = game[0].cells.where(free: true)
+    puts 
+puts "time"
+  move = empty_cells.sample
+  puts "is very"
+  move
+
     
   end
 
@@ -58,47 +66,52 @@ class Board < ApplicationRecord
 
 
   def make_cross_move(cell)
+    
     cell.cross!
-    cell.toggle(:free)
+    cell.toggle!(:free)
+    
     activate_next(cell)
     deactivate_last(cell)
+    
   end
 
   def make_nought_move(cell)
+    
     cell.nought!
-    cell.toggle(:free)
+    cell.toggle!(:free)
     activate_next(cell)
     deactivate_last(cell)
+    
   end
 
   def activate_next(cell)
     index = cell.place - 1
     self.games[index].open!
-    
   end
 
   def deactivate_last(cell)
+   
     game = Game.find(cell.game_id)
     game.closed!
   end
 
-  def cpu_activate_next(cell)
-    index = cell.place - 1
-    self.games[index].status = "open"
-  end
+  # def cpu_activate_next(cell)
+  #   index = cell.place - 1
+  #   self.games[index].status = "open"
+  # end
 
-  def cpu_deactivate_last(cell)
-    cell.free = false
-    game = Game.find(cell.game_id)
-    game.status = "closed"
-  end
+  # def cpu_deactivate_last(cell)
+  #   cell.free = false
+  #   game = Game.find(cell.game_id)
+  #   game.status = "closed"
+  # end
 
-  def computer_predict(cell)
-    self.cpu_activate_next(cell)
-    self.cpu_deactivate_last(cell)
-    game = self.games[cell.place - 1]
-    game
-  end
+  # def computer_predict(cell)
+  #   self.cpu_activate_next(cell)
+  #   self.cpu_deactivate_last(cell)
+  #   game = self.games[cell.place - 1]
+  #   game
+  # end
 
 
   # methods for the MCTS algorithm

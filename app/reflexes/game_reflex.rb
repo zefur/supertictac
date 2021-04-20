@@ -3,7 +3,7 @@
 class GameReflex < ApplicationReflex
   delegate :current_user, to: :connection
   delegate :session_id, to: :connection
-  before_reflex :set_game_room, :info
+  before_reflex :set_game_room
   after_reflex :game_won, :game_over
   # Add Reflex methods in this file.
   #
@@ -52,15 +52,16 @@ class GameReflex < ApplicationReflex
         name: 'x'
       ).broadcast_to(@game_room)
       next_area
-      game_over
-      @game_room.player2!
+      # game_over
+      #  @game_room.player2!
       #  uncomment below to work on the cpu functionality
-        #  cpu 
+       cpu 
+      puts "111111111111111"
+      puts "guess what"
+      puts "111111111111111"
     elsif current_user == @players[1] && @game_room.player2?
-      @cell.nought!
-      @cell.toggle(:free)
-      @game_room.board.games[@index - 1].open!
-      @old_game.closed!
+      
+      @board.make_nought_move(@cell)
       morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell, class: 'circle' }))
       cable_ready[GameRoomChannel].add_css_class(
         selector: "#cell_#{@cell.id}",
@@ -159,26 +160,22 @@ class GameReflex < ApplicationReflex
   end
 
   def cpu
-
-     @game_room.board.make_move_computer
-    
-    #  ComputerMoveJob.perform_later
-    # @cell.toggle(:free)
-    # @game_room.board.games[@index - 1].open!
-    # @old_game.closed!
-    # morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell, class: 'circle' }))
-    # cable_ready[GameRoomChannel].add_css_class(
-    #   selector: "#cell_#{@cell.id}",
-    #   name: 'circle'
-    # ).broadcast_to(@game_room)
-    # next_area
+    cell = @game_room.board.make_move_computer
+    @index = cell.place 
+    # this finds the actual game by ID
+    @old_game = Game.find(cell.game_id)
+    sleep rand(4)
+    @game_room.board.make_nought_move(cell)
+      morph "#cell_#{cell.id}", render(CellComponent.new({ cell: cell, class: 'circle' }))
+      cable_ready[GameRoomChannel].add_css_class(
+        selector: "#cell_#{cell.id}",
+        name: 'circle'
+      ).broadcast_to(@game_room)
+      next_area
     @game_room.player1!
   end
 
-def info
-  puts @game_room.board.games.ids
-  puts @game_room.board.games.each {|x| x.place}
-end
+
 
   def next_area
     cable_ready[GameRoomChannel].remove_css_class(

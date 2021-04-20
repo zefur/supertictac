@@ -7,11 +7,11 @@
     <div>
       <p><%= @game_room.player_turn %>  <%= @message %></p>
     </div>
-    <% if @game_room.players.count != 2 %>
-      <p> Waiting for opponent</p>
-    <% else %>
-      <button class="text-2xl bg-gray-200 py-2 px-1 disabled" data-reflex="click->Game#start_game"> Start Game </button>
-    <% end %>
+    <%# if @game_room.players.count != 2 %>
+    <%# <p> Waiting for opponent</p> %>
+    <%# else %>
+    <button class="text-2xl bg-gray-200 py-2 px-1 disabled" data-reflex="click->Game#start_game"> Start Game </button>
+    <%# end %>
     <div id="room-id" class="flex justify-center items-center  <%= @message %> "  data-gameroom-id= "<%= @game_room.id %>">
       <div class="flex-col m-auto">
         <p>Player one: </p>

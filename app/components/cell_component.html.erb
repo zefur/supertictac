@@ -1,11 +1,10 @@
-<div id="<%= dom_id(@cell) %>"  class="flex border-solid border-2 border-black w-20 h-20 rounded-lg items-center cell <%=@cell.cross? ? "x" : "" %> <%=@cell.nought? ? "circle" : ""%> " data-reflex="click->Game#click  " data-cell-id="<%=@cell.id%>" data-reflex-dataset="combined" >  <%=@cell.place%> <%= @message %>
-<%if @cell.cross? %>
-<p class="text-center">X</p>
-<% elsif @cell.nought? %>
-<p class="text-center">O</p>
-<% else %>
-<p>  </p>
-<% end %>
-
+<div id="<%= dom_id(@cell) %>"  class="flex border-solid border-2 border-black w-20 h-20 rounded-lg items-center cell <%="inactive" if !@cell.free %> <%=@cell.cross? ? "x" : "" %> <%=@cell.nought? ? "circle" : ""%> " data-reflex="click->Game#click  " data-cell-id="<%=@cell.id%>" data-reflex-dataset="combined" >  <%=@cell.place%> <%= @message %>
+  <%if @cell.cross? %>
+    <p class="text-center">X</p>
+  <% elsif @cell.nought? %>
+    <p class="text-center">O</p>
+  <% else %>
+    <p>  </p>
+  <% end %>
 </div>
 <%# mouseenter->Game#check debounced:mouseleave->Game#uncheck %>
