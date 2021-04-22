@@ -53,12 +53,11 @@ class GameReflex < ApplicationReflex
       ).broadcast_to(@game_room)
       next_area
       # game_over
-      #  @game_room.player2!
+       @game_room.player2!
+       if @players[1].user_name == 'H.A.L'
       #  uncomment below to work on the cpu functionality
-       cpu 
-      puts "111111111111111"
-      puts "guess what"
-      puts "111111111111111"
+       cpu
+       end
     elsif current_user == @players[1] && @game_room.player2?
       
       @board.make_nought_move(@cell)
@@ -151,6 +150,12 @@ class GameReflex < ApplicationReflex
       children_only: true,
       html: render(BoardComponent.new(board: @game_room.board))
     ).broadcast_to(@game_room)
+  end
+
+  def remove
+    if @game_room.players[1].class == Computer
+    @game_room.leave(@game_room.players[1])
+    end
   end
 
   private

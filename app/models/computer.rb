@@ -8,11 +8,8 @@ attr_accessor :user_name, :board, :depth
         @nodes = Hash.new
     end
 
-    def make_move(game)
-
-        empty_cells = game.cells.where(free: true)
-        empty_cells.sample
-       
+    def remove
+        self.delete
     end
 
 

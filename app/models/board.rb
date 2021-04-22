@@ -45,15 +45,14 @@ class Board < ApplicationRecord
   ].freeze
 @move_list = []
   def make_move_computer
-    puts "letters"
+    puts "1"
     game = self.games.where(status: "open")
-    puts "my"
+    puts "2"
     puts game
     empty_cells = game[0].cells.where(free: true)
-    puts 
-puts "time"
-  move = empty_cells.sample
-  puts "is very"
+    puts "3"
+    move = empty_cells.sample
+  
   move
 
     
@@ -79,6 +78,7 @@ puts "time"
     
     cell.nought!
     cell.toggle!(:free)
+
     activate_next(cell)
     deactivate_last(cell)
     
@@ -86,13 +86,19 @@ puts "time"
 
   def activate_next(cell)
     index = cell.place - 1
-    self.games[index].open!
+    if self.games.where(status:"open").count == 0
+      self.games[index].open!
+    else
+      self.games[index].open! if self.games[index] != Game.find(cell.game_id)
+    end
+    
   end
 
   def deactivate_last(cell)
    
     game = Game.find(cell.game_id)
-    game.closed!
+    
+    game.closed! if game != self.games[cell.place - 1]
   end
 
   # def cpu_activate_next(cell)
