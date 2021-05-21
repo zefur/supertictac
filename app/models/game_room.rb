@@ -42,9 +42,16 @@ class GameRoom < ApplicationRecord
     self.player1!
   end
 
-  def start
+  def start(board)
     self.board.started = true
     self.board.save
+    puts "11111"
+    # root = Root.new(state: board)
+    # root.explore_tree
+    # puts root
+   
+    # root
+    
   end
   
   

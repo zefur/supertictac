@@ -97,17 +97,18 @@ class GameReflex < ApplicationReflex
   end
 
   def test 
-    @message = "this is a test"
-    cable_ready[GameRoomChannel].add_css_class(
-       selector:"#why",
-       name: "inactive"
-    ).remove_css_class(
-      selector: "#win-message",
-      name: ["opacity-0","pointer-events-none"]
-    ).add_css_class(
-      selector: "#win-message",
-      name: ["opacity-95","point-events-auto"]
-    ).broadcast_to(@game_room)
+    # @message = "this is a test"
+    # cable_ready[GameRoomChannel].add_css_class(
+    #    selector:"#why",
+    #    name: "inactive"
+    # ).remove_css_class(
+    #   selector: "#win-message",
+    #   name: ["opacity-0","pointer-events-none"]
+    # ).add_css_class(
+    #   selector: "#win-message",
+    #   name: ["opacity-95","point-events-auto"]
+    # ).broadcast_to(@game_room)
+    @game_room.start(@game_room.board)
   end
 
   def game_won
@@ -131,12 +132,12 @@ class GameReflex < ApplicationReflex
 
   def start_game
     if @game_room.players.count == 2
-      @game_room.start
+      @game_room.start(@game_room.board)
     else
       cpu = Computer.new( {board: @game_room.board})
       @game_room.players << cpu
       @game_room.save
-      @game_room.start
+      @game_room.start(@game_room.board)
       
     end
     
@@ -165,8 +166,23 @@ class GameReflex < ApplicationReflex
   end
 
   def cpu
-    cell = @game_room.board.make_move_computer
-    @index = cell.place 
+  
+    start = Root.new(raw: @game_room.board)
+    # 30.times do 
+      start.explore_tree
+    # end
+    start
+    @index = start.best_move[1] + 1
+    
+    game = @game_room.board.games.where(status: "open")
+  
+    
+    cells = game[0].cells.where(place: @index)
+    cell = cells[0]
+
+
+    # cell = @game_room.board.make_move_computer
+    # @index = cell.place 
     # this finds the actual game by ID
     @old_game = Game.find(cell.game_id)
     sleep rand(4)

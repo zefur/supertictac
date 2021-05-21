@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Match < ApplicationRecord
-  # this is from the cookiehq tictac toe tutorial, I couldnt get it to work it makes sense if I land
+  
   def intitialize(board)
     @parent 
     @board_state = board.games.to_a.map do |game|
