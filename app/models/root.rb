@@ -1,75 +1,78 @@
+# frozen_string_literal: true
+
 class Root < Node
-  attr_accessor :raw, :play, :state, :visits, :wins, :parent, :children, :valid_moves  
-  def initialize(attr ={})
-      super 
-      @state = @raw.convert
-      # convert
-      # @raw.valid_move
-    end
+  attr_reader :raw, :play, :state, :visits, :wins, :parent, :children, :valid_moves
 
-
-# def convert
+  def initialize(attr = {})
+    super
     
-#   board = @raw.games
-#   board.each do |game|
-#       init = []
-#       game.cells.each do |cell|
-#           init << cell.mark
-#       end
-#        @state << [game.place , game.status, "no", init]
-#   end
-#   @state
-# end
+    @state = attr[:board]
+    @valid_moves = @state.available_moves
+  end
 
+  # def convert
 
-    def root?
-      true
-    end
+  #   board = @raw.games
+  #   board.each do |game|
+  #       init = []
+  #       game.cells.each do |cell|
+  #           init << cell.mark
+  #       end
+  #        @state << [game.place , game.status, "no", init]
+  #   end
+  #   @state
+  # end
 
-    def best_child
-      children.max_by &:win_percentage
-    end
+  def root?
+    true
+  end
 
-    def best_move
-      best_child.play
-    end
+  def best_child
+    children.max_by(&:win_percentage)
+  end
 
-    def explore_tree
-      puts "start"
-      selected_node = select
-      playout_node =  if selected_node.leaf
-        puts "1"
-                        selected_node
-                      else
-                        puts "2"
-                        puts selected_node
-                        selected_node.expand
+  def best_move
+    best_child.play
+  end
 
-                      end
-                      puts playout_node
-      won = playout_node.rollout
-      
-      playout_node.backpropagate(won)
-    end
+  def explore_tree
+    # binding.pry
+    selected_node = select
+    playout_node =  if selected_node.leaf?
+                      selected_node
+                    else
+                      selected_node.expand
 
-    def update_won(won)
-      # logic reversed as the node accumulates its children and has no move
-      # of its own
-      if won
-        self.lost
-      else
-        self.won
-      end
-    end
+                    end
+    puts playout_node
+    won = playout_node.rollout
+    
+    playout_node.backpropagate(won)
+  end
 
-    private
-    def select
-      node = self
-      puts node
-      puts "eeee"
-      until valid_moves? || leaf? do
-        node = uct_select_child
-      end
-      node
+  def update_won(won)
+    # logic reversed as the node accumulates its children and has no move
+    # of its own
+    if won
+      self.lost
+      puts "root lost"
+    else
+      self.won
+      puts "root won"
     end
   end
+
+  private
+
+  def select
+    node = self
+    puts node
+    puts 'eeee'
+    node = uct_select_child until valid_moves? || leaf?
+    puts node
+    puts node.valid_moves?
+    puts node.leaf?
+    puts node.children.count
+    node
+  end
+end

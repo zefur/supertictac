@@ -7,16 +7,14 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-1.times do
-  GameRoom.create
-  GameRoom.all.each do |game_room|
-    Board.create(game_room_id: game_room.id)
-  end
+GameRoom.create
+GameRoom.all.each do |game_room|
+  Board.create(game_room_id: game_room.id)
+end
 
-  Board.all.each do |board|
-    9.times do
-      Game.create!(board_id: board.id)
-    end
+Board.all.each do |board|
+  9.times do
+    Game.create!(board_id: board.id)
   end
 end
 Game.all.each do |game|

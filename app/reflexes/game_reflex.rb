@@ -40,11 +40,11 @@ class GameReflex < ApplicationReflex
     @board = @game_room.board
     @players = @game_room.players
     # This gives a number from 1-9 to reference a game in the board by position
-    @index = @cell.place 
+    @index = @cell.place
     # this finds the actual game by ID
     @old_game = Game.find(@cell.game_id)
     if current_user == @players[0] && @game_room.player1?
-     @board.make_cross_move(@cell) 
+      @board.make_cross_move(@cell)
       # this updates the page and shows the changes and broadcasts it to the people in the room
       morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell }))
       cable_ready[GameRoomChannel].add_css_class(
@@ -53,13 +53,13 @@ class GameReflex < ApplicationReflex
       ).broadcast_to(@game_room)
       next_area
       # game_over
-       @game_room.player2!
-       if @players[1].user_name == 'H.A.L'
-      #  uncomment below to work on the cpu functionality
-       cpu
-       end
+      @game_room.player2!
+      if @players[1].user_name == 'H.A.L'
+        #  uncomment below to work on the cpu functionality
+        cpu
+      end
     elsif current_user == @players[1] && @game_room.player2?
-      
+
       @board.make_nought_move(@cell)
       morph "#cell_#{@cell.id}", render(CellComponent.new({ cell: @cell, class: 'circle' }))
       cable_ready[GameRoomChannel].add_css_class(
@@ -74,29 +74,29 @@ class GameReflex < ApplicationReflex
 
   def game_over
     if @game_room.board.check_cross
-      @message = "Crosses have won the game"
+      @message = 'Crosses have won the game'
       @game_room.board.toggle(:game_finishd)
       cable_ready[GameRoomChannel].remove_css_class(
-        selector: "#win-message",
-        name: ["opacity-0","pointer-events-none"]
+        selector: '#win-message',
+        name: %w[opacity-0 pointer-events-none]
       ).add_css_class(
-        selector: "#win-message",
-        name: ["opacity-95","point-events-auto"]
+        selector: '#win-message',
+        name: %w[opacity-95 point-events-auto]
       ).broadcast_to(@game_room)
     elsif @game_room.board.check_nought
-      @message = "Noughts have won the game"
+      @message = 'Noughts have won the game'
       @game_room.board.toggle(:game_finishd)
       cable_ready[GameRoomChannel].remove_css_class(
-        selector: "#win-message",
-        name: ["opacity-0","pointer-events-none"]
+        selector: '#win-message',
+        name: %w[opacity-0 pointer-events-none]
       ).add_css_class(
-        selector: "#win-message",
-        name: ["opacity-95","point-events-auto"]
+        selector: '#win-message',
+        name: %w[opacity-95 point-events-auto]
       ).broadcast_to(@game_room)
     end
   end
 
-  def test 
+  def test
     # @message = "this is a test"
     # cable_ready[GameRoomChannel].add_css_class(
     #    selector:"#why",
@@ -134,13 +134,12 @@ class GameReflex < ApplicationReflex
     if @game_room.players.count == 2
       @game_room.start(@game_room.board)
     else
-      cpu = Computer.new( {board: @game_room.board})
+      cpu = Computer.new({ board: @game_room.board })
       @game_room.players << cpu
       @game_room.save
       @game_room.start(@game_room.board)
-      
+
     end
-    
   end
 
   def restart_game
@@ -154,9 +153,7 @@ class GameReflex < ApplicationReflex
   end
 
   def remove
-    if @game_room.players[1].class == Computer
-    @game_room.leave(@game_room.players[1])
-    end
+    @game_room.leave(@game_room.players[1]) if @game_room.players[1].instance_of?(Computer)
   end
 
   private
@@ -166,37 +163,37 @@ class GameReflex < ApplicationReflex
   end
 
   def cpu
-  
-    start = Root.new(raw: @game_room.board)
-    # 30.times do 
-      start.explore_tree
-    # end
-    start
+    game_state = Test.new(board: @game_room.board)
+    start = Root.new(board: game_state)
+    
+    3.times do |i|
+    start.explore_tree
+    end
+    # start
+    puts start.win_percentage
+    puts start.visits
+    puts start.leaf?
     @index = start.best_move[1] + 1
-    
-    game = @game_room.board.games.where(status: "open")
-  
-    
+
+    game = @game_room.board.games.where(status: 'open')
+
     cells = game[0].cells.where(place: @index)
     cell = cells[0]
 
-
     # cell = @game_room.board.make_move_computer
-    # @index = cell.place 
+    # @index = cell.place
     # this finds the actual game by ID
     @old_game = Game.find(cell.game_id)
     sleep rand(4)
     @game_room.board.make_nought_move(cell)
-      morph "#cell_#{cell.id}", render(CellComponent.new({ cell: cell, class: 'circle' }))
-      cable_ready[GameRoomChannel].add_css_class(
-        selector: "#cell_#{cell.id}",
-        name: 'circle'
-      ).broadcast_to(@game_room)
-      next_area
+    morph "#cell_#{cell.id}", render(CellComponent.new({ cell: cell, class: 'circle' }))
+    cable_ready[GameRoomChannel].add_css_class(
+      selector: "#cell_#{cell.id}",
+      name: 'circle'
+    ).broadcast_to(@game_room)
+    next_area
     @game_room.player1!
   end
-
-
 
   def next_area
     cable_ready[GameRoomChannel].remove_css_class(

@@ -55,10 +55,10 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 # Dev Choice
+gem 'closure_tree'
 gem 'devise'
 gem 'faker'
+gem 'friendly_id'
+gem 'pry-byebug'
 gem 'stimulus_reflex', '~> 3.4'
 gem 'view_component', require: 'view_component/engine'
-gem 'pry-byebug'
-gem 'friendly_id'
-gem 'closure_tree'

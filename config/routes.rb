@@ -11,9 +11,7 @@ Rails.application.routes.draw do
   get '/rooms', to: 'game_rooms#index'
   post 'guest', to: 'application#guest_login'
   resources :users do
-    
-      get :new_guest
-    
+    get :new_guest
   end
   resources :game_rooms do
     member do

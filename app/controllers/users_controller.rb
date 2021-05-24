@@ -1,16 +1,16 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
-    before_action :set_user
-    def show
-        @user = User.find(params[:id])
-    end
+  before_action :set_user
+  def show
+    @user = User.find(params[:id])
+  end
 
-    def new_guest
-        
-    end
+  def new_guest; end
 
-    private
+  private
 
-    def set_user
-        @user = current_user
-    end
+  def set_user
+    @user = current_user
+  end
 end

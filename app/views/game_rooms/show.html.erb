@@ -46,14 +46,12 @@
 </div>
 <%= render(ModalComponent.new(message: @message, game_room: @game_room)) %>
 </main>
-<%= hello = Test.new(board: @game_room.board ) %>
+<%= hello = Root.new(board: Test.new(board: @game_room.board) ) %>
 <%#= hello.state %>
 <%# <% 10.times do  %> %>
   <%# <% hello.explore_tree %> %>
   <%# <% end %> %>
-  <% one = Playout.new(hello) %>
-  <%= two = Playout.new(hello.state) %>
   <%# <%= hello.state %> %>
   <%# <%= hello.state[0][3][5] %> %>
   <%# <% @value = hello.state.select {|v|  v[3].find {|c| c == "cross"} } %> %>
-  <% raise %>
+  <%# raise %>

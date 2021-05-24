@@ -4,9 +4,9 @@ class Board < ApplicationRecord
   has_many :games, dependent: :destroy
   belongs_to :game_room
   attr_accessor :move_list
+
   has_closure_tree
-  
-  
+
   def check_cross
     WINNING_COMBOS.any? do |x|
       x.all? do |y|
@@ -45,27 +45,20 @@ class Board < ApplicationRecord
     [0, 4, 8],
     [2, 4, 6]
   ].freeze
-@move_list = []
+  @move_list = []
   def make_move_computer
-    game = self.games.where(status: "open")
-  
-    
+    game = games.where(status: 'open')
+
     empty_cells = game[0].cells.where(free: true)
 
-    move = empty_cells.sample
-  
-  move
-
-    
+    empty_cells.sample
   end
 
   def check_won?
-  # cells = self.games.each {|game| game.cells.where(free: true)}
+    # cells = self.games.each {|game| game.cells.where(free: true)}
     if check_cross || check_nought || valid_moves.empty?
-      puts "GAME OVER !!!!!!!!!"
-      if valid_moves.empty?
-        puts "James"
-      end
+      puts 'GAME OVER !!!!!!!!!'
+      puts 'James' if valid_moves.empty?
       true
     else
       false
@@ -73,43 +66,40 @@ class Board < ApplicationRecord
   end
 
   def monte
-    puts "test"
-    game = self.games.where(status: "open")
-    game.count == 0 ? game = self.games : game
+    puts 'test'
+    game = games.where(status: 'open')
+    game.count.zero? ? game = games : game
     empty_cells = game.sample.cells.where(free: true)
     cell = empty_cells.sample
     puts empty_cells
-    if self.game_room.player_turn == "player1" 
-       cell.cross! 
-       cell.game.board.game_room.player2! 
-      else 
-        cell.nought!
-        cell.game.board.game_room.player1!
-      end
+    if game_room.player_turn == 'player1'
+      cell.cross!
+      cell.game.board.game_room.player2!
+    else
+      cell.nought!
+      cell.game.board.game_room.player1!
+    end
     cell.toggle!(:free)
     # turn = ["player1", "player2"].cycle
     # self.game_room.player_turn = turn.next
     # self.game_room.save
     puts cell
-  
+
     cell
   end
 
   def valid_moves
-    game = self.games.where(status: "open")
-    game.count == 0 ? game = self.games : game
+    game = games.where(status: 'open')
+    game.count.zero? ? game = games : game
     empty_cells = game.sample.cells.where(free: true)
-    if empty_cells.count == 0
-      puts "no valid moves"
-    end
+    puts 'no valid moves' if empty_cells.count.zero?
     empty_cells
   end
 
   def undo(cell)
-      cell.nothing?
-      cell.toggle(:free)
+    cell.nothing?
+    cell.toggle(:free)
   end
-
 
   def make_cross_move(cell)
     cell.cross!
@@ -127,84 +117,74 @@ class Board < ApplicationRecord
 
   def activate_next(cell)
     index = cell.place - 1
-    if self.games.where(status:"open").count == 0
-      self.games[index].open!
-    else
-      self.games[index].open! if self.games[index] != Game.find(cell.game_id)
+    if games.where(status: 'open').count.zero?
+      games[index].open!
+    elsif games[index] != Game.find(cell.game_id)
+      games[index].open!
     end
-    
   end
 
   def deactivate_last(cell)
     game = Game.find(cell.game_id)
-    game.closed! if game != self.games[cell.place - 1]
+    game.closed! if game != games[cell.place - 1]
   end
-
 
   def explore(cell)
-     self.game_room.player_turn == "player1" ? cell.cross! : cell.nought!
+    game_room.player_turn == 'player1' ? cell.cross! : cell.nought!
     cell.toggle!(:free)
-    turn = ["player1", "player2"].cycle
-    self.game_room.player_turn = turn.next
-    self.game_room.save
+    turn = %w[player1 player2].cycle
+    game_room.player_turn = turn.next
+    game_room.save
     computer_predict(cell)
-    
-
   end
 
+  def cpu_activate_next(cell)
+    index = cell.place - 1
+    puts index
+    if games.where(status: 'open').count.zero?
+      games[index].open!
 
-   def cpu_activate_next(cell)
-     index = cell.place - 1
-     puts index
-  if self.games.where(status:"open").count == 0
-    self.games[index].open!
-    
-  else
-    self.games[index].open! if self.games[index] != Game.find(cell.game_id)
+    elsif games[index] != Game.find(cell.game_id)
+      games[index].open!
+    end
   end
- 
-   end
 
   def cpu_deactivate_last(cell)
-    
     game = Game.find(cell.game_id)
-    game.closed! if game != self.games[cell.place - 1]
+    game.closed! if game != games[cell.place - 1]
   end
 
   def computer_predict(cell)
     cpu_activate_next(cell)
     cpu_deactivate_last(cell)
-    puts "jabber jabber"
-    
-    game = self.games[cell.place - 1]
-   
-    game
-  end
+    puts 'jabber jabber'
 
+    games[cell.place - 1]
+  end
 
   # methods for the MCTS algorithm
 
-#   def legal_plays(board)
-#     plays = board.games.find_by(status: "open").cells.where(free: true)
-#     puts "11111111"
-#     p plays.class
-#     p plays
-#     plays
-#   end
+  #   def legal_plays(board)
+  #     plays = board.games.find_by(status: "open").cells.where(free: true)
+  #     puts "11111111"
+  #     p plays.class
+  #     p plays
+  #     plays
+  #   end
 
-#   def next_state(state, move)
-# state.game.where(status: "open")
-# computer_predict(move)
-#   end
+  #   def next_state(state, move)
+  # state.game.where(status: "open")
+  # computer_predict(move)
+  #   end
 
-#   def winner(state)
-#     if check_cross
-#       -1
-#     elsif check_nought
-#       1
-#     else
-#       0
-#     end
+  #   def winner(state)
+  #     if check_cross
+  #       -1
+  #     elsif check_nought
+  #       1
+  #     else
+  #       0
+  #     end
 
-#   end
+  #   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSlugToGameRoom < ActiveRecord::Migration[6.0]
   def change
     add_column :game_rooms, :slug, :string

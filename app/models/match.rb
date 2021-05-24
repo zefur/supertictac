@@ -1,34 +1,32 @@
 # frozen_string_literal: true
 
 class Match < ApplicationRecord
-  
   def intitialize(board)
-    @parent 
+    @parent
     @board_state = board.games.to_a.map do |game|
-      me = []  
-      me << game.serializable_hash(only: [:id, :status])
+      me = []
+      me << game.serializable_hash(only: %i[id status])
       me << game.cells.to_a.map do |cell|
-        cell.serializable_hash(only: [:id, :mark, :place])
-      end  
+        cell.serializable_hash(only: %i[id mark place])
+      end
       me
     end
     @move
 
     @wins
     @visits
-    @children =[]
-    @untried_moves 
+    @children = []
+    @untried_moves
   end
-  
 
   def uct_value
-    win_percentage + UCT_BIAS_FACTOR * Math.sqrt(Math.log(parent.visits)/@visits)
+    win_percentage + UCT_BIAS_FACTOR * Math.sqrt(Math.log(parent.visits) / @visits)
   end
 
   def win_percentage
-    @wins/@visits
+    @wins / @visits
   end
-  
+
   def root?
     false
   end
@@ -38,25 +36,17 @@ class Match < ApplicationRecord
   end
 
   def uct_select_child
-    children.max_by &:uct_value
+    children.max_by(&:uct_value)
   end
 
   def expand
-    move= @untried_moves.sample
+    move = @untried_moves.sample
     create_child(move)
   end
 
-  def rollout
-    
-  end
-  
-  def create_child
+  def rollout; end
 
-  end
-
-
-
+  def create_child; end
 end
-
 
 # board.games.to_a.map(&:cells).to_a(&:serlialize_hash)

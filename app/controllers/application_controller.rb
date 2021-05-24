@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-   include DeviseWhitelist
-   include CableReady::Broadcaster
+  include DeviseWhitelist
+  include CableReady::Broadcaster
   #  protect_from_forgery
-  
+
   # include CurrentUserConcern
   require 'faker'
-   helper_method :current_or_guest_user
+  helper_method :current_or_guest_user
 
   # if user is logged in, return current_user, else return guest_user
   def current_or_guest_user
@@ -39,8 +39,6 @@ class ApplicationController < ActionController::Base
     guest_user if with_retry
   end
 
-  
-
   private
 
   # called (once) when the user logs in, insert any code your application needs
@@ -49,8 +47,8 @@ class ApplicationController < ActionController::Base
     # For example:
     # guest_comments = guest_user.comments.all
     # guest_comments.each do |comment|
-      # comment.user_id = current_user.id
-      # comment.save!
+    # comment.user_id = current_user.id
+    # comment.save!
     # end
   end
 
