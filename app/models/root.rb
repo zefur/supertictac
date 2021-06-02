@@ -8,6 +8,7 @@ class Root < Node
     
     @state = attr[:board]
     @valid_moves = @state.available_moves
+    @leaf = false
   end
 
   # def convert
@@ -37,6 +38,7 @@ class Root < Node
 
   def explore_tree
     # binding.pry
+    reset = @state.state
     selected_node = select
     playout_node =  if selected_node.leaf?
                       selected_node
@@ -46,7 +48,7 @@ class Root < Node
                     end
     puts playout_node
     won = playout_node.rollout
-    
+    @state.state = reset
     playout_node.backpropagate(won)
   end
 

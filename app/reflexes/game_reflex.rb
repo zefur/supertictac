@@ -76,6 +76,8 @@ class GameReflex < ApplicationReflex
     if @game_room.board.check_cross
       @message = 'Crosses have won the game'
       @game_room.board.toggle(:game_finishd)
+      @game_room.players[0].won 
+      @game_room.players[1].losses += 1
       cable_ready[GameRoomChannel].remove_css_class(
         selector: '#win-message',
         name: %w[opacity-0 pointer-events-none]
@@ -86,6 +88,8 @@ class GameReflex < ApplicationReflex
     elsif @game_room.board.check_nought
       @message = 'Noughts have won the game'
       @game_room.board.toggle(:game_finishd)
+      @game_room.players[1].lost
+      @game_room.players[0].losses += 1
       cable_ready[GameRoomChannel].remove_css_class(
         selector: '#win-message',
         name: %w[opacity-0 pointer-events-none]
@@ -163,25 +167,26 @@ class GameReflex < ApplicationReflex
   end
 
   def cpu
-    game_state = Test.new(board: @game_room.board)
-    start = Root.new(board: game_state)
+    # game_state = Test.new(board: convert)
+    # start = Root.new(board: game_state)
     
-    3.times do |i|
-    start.explore_tree
-    end
-    # start
-    puts start.win_percentage
-    puts start.visits
-    puts start.leaf?
-    @index = start.best_move[1] + 1
+    # 3.times do |i|
+    # start.explore_tree
+    # end
+    # # start
+    # puts "test"
+    # puts start.win_percentage
+    # puts start.visits
+    
+    # @index = start.best_move[1] + 1
 
-    game = @game_room.board.games.where(status: 'open')
+    # game = @game_room.board.games.where(status: 'open')
 
-    cells = game[0].cells.where(place: @index)
-    cell = cells[0]
+    # cells = game[0].cells.where(place: @index)
+    # cell = cells[0]
 
-    # cell = @game_room.board.make_move_computer
-    # @index = cell.place
+    cell = @game_room.board.make_move_computer
+    @index = cell.place
     # this finds the actual game by ID
     @old_game = Game.find(cell.game_id)
     sleep rand(4)
@@ -212,5 +217,17 @@ class GameReflex < ApplicationReflex
       selector: "#game_#{@index}",
       name: 'ring-4'
     ).broadcast_to(@game_room)
+  end
+
+  def convert
+    @state = []
+    @game_room.board.games.each do |game|
+      init = []
+      game.cells.each do |cell|
+        init << cell.mark
+      end
+      @state << [game.place, game.status, 'no', init]
+    end
+    @state
   end
 end

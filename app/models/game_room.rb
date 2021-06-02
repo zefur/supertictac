@@ -2,7 +2,7 @@
 
 class GameRoom < ApplicationRecord
   include CableReady::Broadcaster
-
+validates_uniqueness_of :room_name, on: :create, message: "must be unique"
   extend FriendlyId
 
   belongs_to :user
@@ -26,7 +26,7 @@ class GameRoom < ApplicationRecord
 
   def leave(user)
     players.delete(user) || viewers.delete(user)
-    if self.players.count == 0
+    if self.players.count == 0 || self.players[1].class == "Computer"
       self.destroy
     end
     save

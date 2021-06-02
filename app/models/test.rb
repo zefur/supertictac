@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 class Test
-  attr_reader :state, :raw, :children, :valid_moves, :board
+  attr_accessor :state, :raw, :children, :valid_moves, :board
 
   def initialize(attr = {})
     @board = VirtualBoard.new
     @logic = CpuLogic.new
-    @test = @board.set_state(attr[:board])
+    @state = attr[:board]
     # @valid_moves = []
   end
 
   def make_move(move)
-    value = @logic.make_move(move, @test)
+    value = @logic.make_move(move, @state)
     @board.update_state(value)
   end
 
@@ -34,7 +34,7 @@ class Test
   # end
 
   def available_moves
-    moves =  @test.find {|s| s[1] == "open" }
+    moves =  @state.find {|s| s[1] == "open" }
       # @valid_moves.empty? ? moves = @test[0] : moves
       indexes = moves[3].each_with_index.select {|c,i | c == "nothing"}
       @valid_moves = indexes
@@ -57,7 +57,7 @@ class Test
        
         x.all? do |y|
   
-          @test[y][2] == "cross"
+          @state[y][2] == "cross"
         end
       end
     end
@@ -66,7 +66,7 @@ class Test
     def check_nought
          WINNING_COMBOS.any? do |x|
         x.all? do |y|
-          @test[y][2] == "nought"
+          @state[y][2] == "nought"
         end
       end
     end

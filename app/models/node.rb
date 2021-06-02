@@ -12,7 +12,7 @@ class Node
     @visits = 0
     @children = []
     @valid_moves = [] 
-    @leaf =  @valid_moves.empty?
+    @leaf =  valid_moves.empty?
   end
 
   # def finished?
@@ -35,7 +35,7 @@ class Node
     false
   end
 
-  def leaf?; 
+  def leaf? 
   @leaf
   end
 
@@ -102,7 +102,7 @@ class Node
   private
 
   def create_child(move)
-    game_state = @state.clone
+    game_state = @state.deep_dup
     game_state.make_move(move)
     puts game_state
     puts self
@@ -113,89 +113,4 @@ class Node
   end
 
  
-
-  # def make_move(move)
-  #   unless move.nil?
-  #     if move[0] == 'nothing'
-  #       index = move[1]
-  #       # @count += 1
-  #       new_state = board.state
-  #       # change the cell value
-  #       test = new_state.find { |s| s[1] == 'open' }
-  #       test[3][index] = @cpu ? 'nought' : 'cross'
-  #       test[1] = 'closed'
-  #       new_state[test[0] - 1] = test
-  #       @check = new_state
-
-  #       if game_cross(test[3])
-  #         test[2] = 'cross'
-  #       elsif game_nought(test[3])
-  #         test[2] = 'nought'
-  #       end
-  #       new_state[index][1] = 'open'
-  #       @cpu = !cpu
-
-  #       check_won?
-  #       @check = new_state
-  #     else
-  #       puts 'this is the end'
-  #     end
-  #   end
-  # end
-
-  def check_cross
-    if @check.empty?
-      false
-    else
-      WINNING_COMBOS.any? do |x|
-        x.all? do |y|
-          @check[y][2] == 'cross'
-        end
-      end
-    end
-  end
-
-  def game_cross(game)
-    WINNING_COMBOS.any? do |x|
-      x.all? do |y|
-        game[y] == 'cross'
-      end
-    end
-  end
-
-  def game_nought(game)
-    WINNING_COMBOS.any? do |x|
-      x.all? do |y|
-        game[y] == 'nought'
-      end
-    end
-  end
-
-  def check_nought
-    if @check.empty?
-      false
-    else
-      WINNING_COMBOS.any? do |x|
-        x.all? do |y|
-          @check[y][2] == 'nought'
-        end
-      end
-    end
-  end
-
-  def check_score
-    if check_nought
-      'nought'
-    else
-      'no'
-    end
-  end
-
-  def check_won?
-    if check_nought || check_cross || @board.valid_moves.count.zero?
-      true
-    else
-      false
-    end
-  end
 end

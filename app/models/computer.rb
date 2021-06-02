@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 class Computer
-  attr_accessor :user_name, :board, :depth, :state, :check
+  attr_accessor :user_name, :board, :depth, :state, :check, :wins, :losses
 
   def initialize(attr = { UCB1ExploreParam: 2 })
     @board = Test.new(board: attr[:board])
     @user_name = 'H.A.L'
     @depth = 20
+    @wins = 0
+    @losses = 0
     @UCB1ExploreParam = attr[:UCB1ExploreParam]
     @state = []
     @finished = false

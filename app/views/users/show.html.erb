@@ -6,6 +6,20 @@
 <div>
   <h2>Stats</h2>
 </div>
-<p>Wins: <%= @user.wins %></p>
-<p>Losses: <%= @user.losses %></p>
-<p>Draws: <%= @user.draws %></p>
+<div class="grid grid-cols-3 place-items-center bg-purple-300 ">
+  <div class="bg-blue-600 w-60 h-60 rounded-md text-center  place-content-center flex-col ">
+    <div class="bg-red-400">
+      <p class="text-3xl">Wins: </p>
+    </div>
+    <div class="bg-yellow-700 h-100 place-self-center ">
+      <p class=""><%= @user.wins %></p>
+    </div>
+  </div>
+  <div class="bg-blue-600 w-60 h-60 rounded-md ">
+    <p>Losses: <%= @user.losses %></p>
+  </div>
+  <div class="bg-blue-600 w-60 h-60 rounded-md ">
+    <p>Draws: <%= @user.draws %></p>
+  </div>
+</div>
+<%= link_to "back", :back %>

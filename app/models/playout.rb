@@ -1,7 +1,7 @@
 class Playout
 attr_accessor :board, :cpu, :check, :count
     def initialize(state)
-        @state = state.deep_dup
+        @state = state.dup
         @cpu = true
         @count = 0
         @check = []

@@ -7,4 +7,14 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :game_rooms, dependent: :destroy
+
+  def won
+    self.wins += 1
+    self.save
+  end
+
+  def lost
+    self.losses += 1
+    self.save
+  end
 end
