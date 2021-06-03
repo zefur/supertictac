@@ -21,7 +21,7 @@
         </button>
       <% end %>
     </div>
-    <div id="room-id" class="flex justify-center items-center  <%= @message %> "  data-gameroom-id= "<%= @game_room.id %>">
+    <div id="room-id" class="flex justify-center items-center "  data-gameroom-id= "<%= @game_room.id %>">
       <div class="flex-col m-auto">
         <p>Player one: </p>
         <p><%= @game_room.players[0] ? @game_room.players[0].user_name : "waiting for opponent" %></p>
