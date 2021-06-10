@@ -8,7 +8,7 @@ Rails.application.configure do
 
   config.cache_store = :redis_cache_store, {driver: :hiredis, url: ENV.fetch("REDIS_URL")}
 
-config.session_store :redis_session_store, {
+config.session_store :redis_session_store, 
   key: Rails.application.credentials.app_session_key,
   serializer: :json,
   redis: {
@@ -17,7 +17,7 @@ config.session_store :redis_session_store, {
     key_prefix: "app:session:",
     url: ENV.fetch("REDIS_URL")
   }
-}
+
 
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
