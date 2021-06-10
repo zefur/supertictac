@@ -26,6 +26,7 @@ validates_uniqueness_of :room_name, on: :create, message: "must be unique"
 
   def leave(user)
     players.delete(user) || viewers.delete(user)
+    
     if self.players.count == 0 || self.players[1].class == "Computer"
       self.destroy
     end
