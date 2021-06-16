@@ -2,20 +2,23 @@
 
 ## SuperTicTac
 
-A lot more to do, I wasnt able to complete in the 7 days
 
 Things to do (almost everything)
 
-- ~~make it two player only (more people can watch but only two can interact)~~
+- ~~make it two player only (more people can watch but only two can interact)
 - ~~finish the move logic (activating and deactivating cells) you should only be able to play in the highlighted cells~~
 - ~~implement the game logic (the basics are already there in Game.rb and Board.rb)~~
-- Add login and profile pages
-- Stat tracking capabilities
+- ~~Add stupid Ai~~
+- Chat functionality
+- STYLING
+- Chat capabilities 
+- Add login and profile pages(implemented basic)
+- Stat tracking capabilities(wins and losses implemented)
 - Add powerups(on hold)
-- Add AI(on hold)
-- Make it pretty
-- Allow the destruction of rooms
-- Allow for options in the room build method
+- Add smart AI(on hold)
+- Make it pretty(see above)
+- Allow the destruction of rooms(guest's rooms /should/ delete on log out)
+- Allow for options in the room build method(
 
 Probably a lot more to do
 
