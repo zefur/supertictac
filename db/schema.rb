@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_19_044221) do
+ActiveRecord::Schema.define(version: 2021_06_13_051348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,10 +89,8 @@ ActiveRecord::Schema.define(version: 2021_04_19_044221) do
     t.integer "losses", default: 0
     t.integer "draws", default: 0
     t.string "user_name"
-    t.bigint "game_room_id"
     t.string "type"
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["game_room_id"], name: "index_users_on_game_room_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
@@ -100,5 +98,4 @@ ActiveRecord::Schema.define(version: 2021_04_19_044221) do
   add_foreign_key "cells", "games"
   add_foreign_key "game_rooms", "users"
   add_foreign_key "games", "boards"
-  add_foreign_key "users", "game_rooms"
 end

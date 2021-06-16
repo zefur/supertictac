@@ -1,7 +1,7 @@
 <%= form_for @game_room do |f| %>
   <%= f.label "Game Room Name" %>
-  <%= f.text_field :room_name, value: "#{current_or_guest_user.user_name}'s room" %>
-  <%= f.hidden_field :user_id, value: current_or_guest_user.id %>
+  <%= f.text_field :room_name, value: "#{current_user.user_name}'s room" %>
+  <%= f.hidden_field :user_id, value: current_user.id %>
   <%= f.submit "Submit", disable_with: 'Submiting...' %>
 <% end %>
 <div data-reflex='click->GameReflex#test'>This is the test</div>
