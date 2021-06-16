@@ -46,7 +46,7 @@
               <button type="button" class="py-2 px-4  bg-blue-700 hover:bg-blue-800 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg ">
                 <%= link_to "Join Room",  join_match_game_room_path(game_room, {user_id:current_user}) %>
               </button>
-              <% if current_or_guest_user.id == game_room.user_id %>
+              <% if current_user.id == game_room.user_id %>
                 <div type="button" class="py-2 px-4  bg-red-700 hover:bg-red-800 focus:ring-red-500 focus:ring-offset-red-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg ">
                   <%= link_to "Destroy Room",  game_room_path(game_room), method: :delete %>
                 </div>
@@ -57,3 +57,5 @@
       </div>
     <% end %>
     <div type="button"><%= link_to "Home", root_path, class: "p-5 bg-yellow-600 hover:bg-yellow-900 focus:ring-yellow-300 focus:ring-offset-black" %></div>
+    <%= current_user.type %>
+    <%= current_user.class %>
