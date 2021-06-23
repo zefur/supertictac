@@ -10,7 +10,10 @@
       </ul>
     </div>
   <% end %>
-
+  
+  <%= form.text_field :content%>
+<%= form.hidden_field :user_id, value: current_user.id %>
+<%= form.hidden_field :game_room_id, value: @game_room.id %>
   <div class="actions">
     <%= form.submit %>
   </div>

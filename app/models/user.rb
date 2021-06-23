@@ -7,7 +7,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :game_rooms, dependent: :destroy
-
+  has_many :messages
   def won
     self.wins += 1
     self.save

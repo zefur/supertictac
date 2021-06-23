@@ -74,7 +74,7 @@ class GameReflex < ApplicationReflex
 
   def game_over
     if @game_room.board.check_cross
-      @message = 'Crosses have won the game'
+      @info = 'Crosses have won the game'
       @game_room.board.toggle(:game_finishd)
       @game_room.players[0].won 
       @game_room.players[1].losses += 1
@@ -86,7 +86,7 @@ class GameReflex < ApplicationReflex
         name: %w[opacity-95 point-events-auto]
       ).broadcast_to(@game_room)
     elsif @game_room.board.check_nought
-      @message = 'Noughts have won the game'
+      @info = 'Noughts have won the game'
       @game_room.board.toggle(:game_finishd)
       @game_room.players[1].lost
       @game_room.players[0].losses += 1
@@ -101,7 +101,7 @@ class GameReflex < ApplicationReflex
   end
 
   def test
-    # @message = "this is a test"
+    # @info = "this is a test"
     # cable_ready[GameRoomChannel].add_css_class(
     #    selector:"#why",
     #    name: "inactive"

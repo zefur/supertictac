@@ -7,7 +7,7 @@ validates_uniqueness_of :room_name, on: :create, message: "must be unique"
 
   belongs_to :user
   friendly_id :room_name, use: :slugged
-
+  has_many :messages, dependent: :delete_all
   has_one :board, dependent: :destroy
   serialize :players, Array
   serialize :viewers, Array

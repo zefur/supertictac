@@ -5,7 +5,7 @@
       <%= @message %>
     </div>
     <div>
-      <p><%= @game_room.player_turn %>  <%= @message %></p>
+      <p><%= @game_room.player_turn %>  <%= @info %></p>
     </div>
     <div id="start-game">
       <% if @game_room.players.count != 2 %>
@@ -44,7 +44,9 @@
 <div data-reflex='click->GameReflex#test'>This is the test</div>
 <div id="win-area">
 </div>
-<%= render(ModalComponent.new(message: @message, game_room: @game_room)) %>
+<%= render(ModalComponent.new(info: @info, game_room: @game_room)) %>
+
+<%= render(ChatboxComponent.new(room: @game_room)) %>
 </main>
 <%#= hello = Root.new(board: Test.new(board: @game_room.board) ) %>
 <%#= hello.state %>
