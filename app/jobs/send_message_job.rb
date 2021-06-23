@@ -7,10 +7,11 @@ class SendMessageJob < ApplicationJob
         puts "testing"
         puts message
         # binding.pry
+        html =  ApplicationController.render(MessageComponent.new(message: message)) 
         cable_ready[GameRoomChannel].insert_adjacent_html(
             selector:  '#chat-area',
             position: "beforeend",
-            html: "<div> #{message.content} #{messge.user} </div>"
+            html:  html
         ).broadcast_to(message.game_room)
     end
 
