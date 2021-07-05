@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class ChatboxComponent < ViewComponent::Base
-def initialize(attr = {})
+  def initialize(attr = {})
     @room = attr[:room]
-end
-
+    @current_user = attr[:user]
+  end
 end

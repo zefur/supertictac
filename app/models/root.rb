@@ -5,7 +5,7 @@ class Root < Node
 
   def initialize(attr = {})
     super
-    
+
     @state = attr[:board]
     @valid_moves = @state.available_moves
     @leaf = false
@@ -56,11 +56,11 @@ class Root < Node
     # logic reversed as the node accumulates its children and has no move
     # of its own
     if won
-      self.lost
-      puts "root lost"
+      lost
+      puts 'root lost'
     else
       self.won
-      puts "root won"
+      puts 'root won'
     end
   end
 

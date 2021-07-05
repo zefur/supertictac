@@ -2,7 +2,7 @@
   <div dom_id="<%=@game_room%>">
     <div>
       <p>There are <%= @game_room.viewers.count %> watching</p>
-      <%= @message %>
+      <%= @game_room.players %>
     </div>
     <div>
       <p><%= @game_room.player_turn %>  <%= @info %></p>
@@ -22,16 +22,15 @@
       <% end %>
     </div>
     <div id="room-id" class="flex justify-center items-center "  data-gameroom-id= "<%= @game_room.id %>">
-      <div class="flex-col m-auto">
-        <p>Player one: </p>
-        <p><%= @game_room.players[0] ? @game_room.players[0].user_name : "waiting for opponent" %></p>
-      </div>
+      
       <div id="why" class="<%= @game_room.board.game_finishd ? "inactive" : "active" %> ">
         <%= render(BoardComponent.new({board: @game_room.board})) %>
       </div>
-      <div class="flex-col m-auto">
-        <p>Player two: </p>
-        <p><%= @game_room.players[1] ? @game_room.players[1].user_name : "waiting for opponent" %></p>
+      <div class="flex m-auto">
+       
+        <div id="hello">
+<%= render(ChatboxComponent.new(room: @game_room, user: current_user)) %>
+</div>
       </div>
     </div>
     <div class="w-screen flex justify-center ">
@@ -46,14 +45,5 @@
 </div>
 <%= render(ModalComponent.new(info: @info, game_room: @game_room)) %>
 
-<%= render(ChatboxComponent.new(room: @game_room)) %>
 </main>
-<%#= hello = Root.new(board: Test.new(board: @game_room.board) ) %>
-<%#= hello.state %>
-<%# <% 10.times do  %> %>
-  <%# <% hello.explore_tree %> %>
-  <%# <% end %> %>
-  <%# <%= hello.state %> %>
-  <%# <%= hello.state[0][3][5] %> %>
-  <%# <% @value = hello.state.select {|v|  v[3].find {|c| c == "cross"} } %> %>
-  <%# raise %>
+

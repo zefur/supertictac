@@ -76,7 +76,7 @@ class GameReflex < ApplicationReflex
     if @game_room.board.check_cross
       @info = 'Crosses have won the game'
       @game_room.board.toggle(:game_finishd)
-      @game_room.players[0].won 
+      @game_room.players[0].won
       @game_room.players[1].losses += 1
       cable_ready[GameRoomChannel].remove_css_class(
         selector: '#win-message',
@@ -115,6 +115,19 @@ class GameReflex < ApplicationReflex
     @game_room.start(@game_room.board)
   end
 
+  def post
+puts params
+puts "+++++++++++++++++++++++++++++++++++++++++++++++++++"
+    Message.create(content:   , game_room_id: @game_room.id, user_id: current_user.id)
+    # morph '#hello', render(ChatboxComponent.new(room: @game_room))
+    cable_ready[GameRoomChannel].morph(
+      selector: '#hello',
+      children_only: true,
+      html: render(ChatboxComponent.new(room: @game_room))
+    ).broadcast_to(@game_room)
+    
+  end
+
   def game_won
     # checks if a game quadrant has been won (cableready highlighting lost on refresh)
     @game_room.board.games.each do |x|
@@ -136,14 +149,13 @@ class GameReflex < ApplicationReflex
 
   def start_game
     if @game_room.players.count == 2
-      @game_room.start(@game_room.board)
     else
       cpu = Computer.new({ board: @game_room.board })
       @game_room.players << cpu
       @game_room.save
-      @game_room.start(@game_room.board)
 
     end
+    @game_room.start(@game_room.board)
   end
 
   def restart_game
@@ -169,7 +181,7 @@ class GameReflex < ApplicationReflex
   def cpu
     # game_state = Test.new(board: convert)
     # start = Root.new(board: game_state)
-    
+
     # 3.times do |i|
     # start.explore_tree
     # end
@@ -177,7 +189,7 @@ class GameReflex < ApplicationReflex
     # puts "test"
     # puts start.win_percentage
     # puts start.visits
-    
+
     # @index = start.best_move[1] + 1
 
     # game = @game_room.board.games.where(status: 'open')

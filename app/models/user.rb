@@ -10,11 +10,11 @@ class User < ApplicationRecord
   has_many :messages
   def won
     self.wins += 1
-    self.save
+    save
   end
 
   def lost
     self.losses += 1
-    self.save
+    save
   end
 end

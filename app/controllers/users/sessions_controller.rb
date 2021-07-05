@@ -21,14 +21,12 @@ module Users
     # DELETE /resource/sign_out
     def destroy
       super
-      if guest_user.type == "Guest"
+      if guest_user.type == 'Guest'
         test = User.find(guest_user.id)
         test.clean_up
-        User.find(guest_user.id).destroy 
+        User.find(guest_user.id).destroy
       end
     end
-
-    private 
 
     # def clean
     #   puts "this is happening"

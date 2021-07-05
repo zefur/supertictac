@@ -16,8 +16,7 @@ class Test
   end
 
   def get_move
-    move = @valid_moves.sample
-    move
+    @valid_moves.sample
   end
 
   # def convert
@@ -34,54 +33,46 @@ class Test
   # end
 
   def available_moves
-    moves =  @state.find {|s| s[1] == "open" }
-      # @valid_moves.empty? ? moves = @test[0] : moves
-      indexes = moves[3].each_with_index.select {|c,i | c == "nothing"}
-      @valid_moves = indexes
+    moves = @state.find { |s| s[1] == 'open' }
+    # @valid_moves.empty? ? moves = @test[0] : moves
+    indexes = moves[3].each_with_index.select { |c, _i| c == 'nothing' }
+    @valid_moves = indexes
   end
 
+  WINNING_COMBOS = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ].freeze
 
-    WINNING_COMBOS = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6]
-    ].freeze
-
-    def check_cross
-      WINNING_COMBOS.any? do |x|
-       
-        x.all? do |y|
-  
-          @state[y][2] == "cross"
-        end
+  def check_cross
+    WINNING_COMBOS.any? do |x|
+      x.all? do |y|
+        @state[y][2] == 'cross'
       end
     end
-  
+  end
 
-    def check_nought
-         WINNING_COMBOS.any? do |x|
-        x.all? do |y|
-          @state[y][2] == "nought"
-        end
+  def check_nought
+    WINNING_COMBOS.any? do |x|
+      x.all? do |y|
+        @state[y][2] == 'nought'
       end
     end
+  end
 
-    def finished?
+  def finished?; end
 
+  def check_won?
+    if @valid_moves.empty? || check_nought || check_cross
+      true
+    else
+      false
     end
-  
-
-    def check_won?
-      
-      if @valid_moves.empty? || check_nought || check_cross 
-        true
-      else
-        false
-      end
-    end
+  end
 end

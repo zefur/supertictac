@@ -11,7 +11,7 @@ class Node
     @wins = 0.0
     @visits = 0
     @children = []
-    @valid_moves = [] 
+    @valid_moves = []
     @leaf =  valid_moves.empty?
   end
 
@@ -35,8 +35,8 @@ class Node
     false
   end
 
-  def leaf? 
-  @leaf
+  def leaf?
+    @leaf
   end
 
   def uct_select_child
@@ -77,8 +77,8 @@ class Node
     node.update_won(won)
     until node.root?
       puts 'not root'
-      
-      won = !won  # switching players perspective
+
+      won = !won # switching players perspective
       puts won
       node = node.parent
       node.update_won(won)
@@ -92,10 +92,10 @@ class Node
   def update_won(won)
     if won
       self.won
-      puts "node won"
+      puts 'node won'
     else
-      self.lost
-      puts "node lost"
+      lost
+      puts 'node lost'
     end
   end
 
@@ -106,11 +106,9 @@ class Node
     game_state.make_move(move)
     puts game_state
     puts self
-    child = Node.new({ state: game_state , parent: self, play: move })
+    child = Node.new({ state: game_state, parent: self, play: move })
     # child.valid_moves = game_state.available_moves
     @children << child
     child
   end
-
- 
 end

@@ -14,17 +14,17 @@ class ApplicationController < ActionController::Base
     if current_user
       if session[:guest_user_id] && session[:guest_user_id] != current_user.id
         logging_in
-        puts "test"
-        puts "11111111"
+        puts 'test'
+        puts '11111111'
         # reload guest_user to prevent caching problems before destruction
         guest_user(with_retry = false).try(:reload).try(:destroy)
         session[:guest_user_id] = nil
       end
       current_user
-      puts "222222222222"
+      puts '222222222222'
     else
       guest_user
-      puts "3333333333"
+      puts '3333333333'
     end
   end
 
@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
     # comment.user_id = current_user.id
     # comment.save!
     # end
-    puts "this is a test"
+    puts 'this is a test'
   end
 
   def create_guest_user

@@ -2,7 +2,7 @@
 
 class GameRoom < ApplicationRecord
   include CableReady::Broadcaster
-validates_uniqueness_of :room_name, on: :create, message: "must be unique"
+  validates_uniqueness_of :room_name, on: :create, message: 'must be unique'
   extend FriendlyId
 
   belongs_to :user
@@ -22,14 +22,21 @@ validates_uniqueness_of :room_name, on: :create, message: "must be unique"
       end
       save
     end
+    cable_ready[GameRoomChannel].insert_adjacent_html(
+      selector: '#chat-area',
+      position: "beforeend",
+      html: "<div>hello</div>"
+    ).broadcast_to(self)
   end
 
   def leave(user)
     players.delete(user) || viewers.delete(user)
-    
-    if self.players.count == 0 || self.players[1].class == "Computer"
-      self.destroy
-    end
+    cable_ready[GameRoomChannel].insert_adjacent_html(
+      selector: '#chat-area',
+      position: "beforeend",
+      html: "<div>hello</dive"
+    ).broadcast_to(self)
+    destroy if players.count == 0 
     save
   end
 
@@ -43,6 +50,10 @@ validates_uniqueness_of :room_name, on: :create, message: "must be unique"
   def start(_board)
     board.started = true
     board.save
-    
   end
+
+  def total_users
+    self.players.count + self.viewers.count
+  end
+
 end

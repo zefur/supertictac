@@ -4,12 +4,11 @@ class VirtualBoard
   attr_reader :state, :valid_moves
 
   def initialize
-    
     @valid_moves
   end
 
   def set_state(board)
-    state =[]
+    state = []
     board.games.each do |game|
       init = []
 
@@ -22,9 +21,6 @@ class VirtualBoard
   end
 
   def update_state(new_state)
-    state = new_state
-    state
+    new_state
   end
-
- 
 end
