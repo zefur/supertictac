@@ -4,7 +4,7 @@ module Users
   class SessionsController < Devise::SessionsController
     # before_action :configure_sign_in_params, only: [:create]
 
-    before_action :clean, only: [:destroy]
+    # before_action :clean, only: [:destroy]
     skip_before_action :verify_authenticity_token, only: %i[update create]
 
     # GET /resource/sign_in
