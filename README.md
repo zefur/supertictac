@@ -28,6 +28,6 @@ To win the game you need to win 3 of the smaller games in a row, so its more str
 
 Its better playing against a human opponent rather than ai
 
-A basic version is playable at supertictac.herokuapp.com[supertictac.herokuapp.com] please click guest to log you in with a burner account and then go to start game to create a game room. You can play against a dumb ai by adding clicking the play against the computer. Otherwise if you send the browser link to another player they should automatically be given a guest login. if you want to test out against yourself using the same browser open the second window in incognito mode otherwise another browser should work (chome vs safari). Please leave the game only by clicking the leave game link 
+A basic version is playable at [supertictac.herokuapp.com](supertictac.herokuapp.com) please click guest to log you in with a burner account and then go to start game to create a game room. You can play against a dumb ai by adding clicking the play against the computer. Otherwise if you send the browser link to another player they should automatically be given a guest login. if you want to test out against yourself using the same browser open the second window in incognito mode otherwise another browser should work (chome vs safari). Please leave the game only by clicking the leave game link 
 
 This is a beta so there will be bugs
